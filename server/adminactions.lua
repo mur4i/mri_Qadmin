@@ -327,8 +327,7 @@ end)
 
 RegisterServerEvent("919-admin:server:MessageAll", function(message)
     local src = source
-    if AdminPanel.HasPermission(src, "messageall") then
-        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentMessageAll"))
+    if AdminPanel.HasPermission(src, "messageall") then TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentMessageAll"))
         TriggerClientEvent("chat:addMessage", -1, {
             color = {255, 50, 50},
             multiline = true,
@@ -352,7 +351,7 @@ RegisterServerEvent("919-admin:server:SetWeather", function(weatherType)
     if AdminPanel.HasPermission(src, "weather") then
         if QBCore then
             exports["qb-weathersync"]:setWeather(weatherType)
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.setWeather", {weatherType}))
+            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.setWeather", {value = weatherType}))
         elseif ESX then
             TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "error", "<strong>"..Lang:t("alerts.error").."</strong> This feature is currently unavailable!")
         end
@@ -363,8 +362,8 @@ RegisterServerEvent("919-admin:server:SetTime", function(hour, minute)
     local src = source
     if AdminPanel.HasPermission(src, "time") then
         if QBCore then
-            exports["qb-weathersync"]:setTime(hour, 0)
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.setTime", {value = hour}))
+            exports["qb-weathersync"]:setTime(tonumber(hour), 0)
+            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.setTime", {value = hour}))
         elseif ESX then
             TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "error", "<strong>"..Lang:t("alerts.error").."</strong> This feature is currently unavailable!")
         end
@@ -590,7 +589,7 @@ end)
 RegisterServerEvent("919-admin:server:RequestVehicleSpawn", function(modelName)
     local src = source
     if AdminPanel.HasPermission(src, "spawncar") then
-        TriggerEvent("QBCore:Server:SpawnVehicle", modelName)
+       qbx.spawnVehicle(modelName)
     end
 end)
 

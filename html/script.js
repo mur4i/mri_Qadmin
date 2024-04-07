@@ -1471,99 +1471,99 @@ AdminPanel.Init = function() {
                     value: '',
                 },
                 {
-                    text: '0100',
+                    text: '01:00',
                     value: '1',
                 },
                 {
-                    text: '0200',
+                    text: '02:00',
                     value: '2',
                 },
                 {
-                    text: '0300',
+                    text: '03:00',
                     value: '3',
                 },
                 {
-                    text: '0400',
+                    text: '04:00',
                     value: '4',
                 },
                 {
-                    text: '0500',
+                    text: '05:00',
                     value: '5',
                 },
                 {
-                    text: '0600',
+                    text: '06:00',
                     value: '6',
                 },
                 {
-                    text: '0700',
+                    text: '07:00',
                     value: '7',
                 },
                 {
-                    text: '0800',
+                    text: '08:00',
                     value: '8',
                 },
                 {
-                    text: '0900',
+                    text: '09:00',
                     value: '9',
                 },
                 {
-                    text: '1000',
+                    text: '10:00',
                     value: '10',
                 },
                 {
-                    text: '1100',
+                    text: '11:00',
                     value: '11',
                 },
                 {
-                    text: '1200',
+                    text: '12:00',
                     value: '12',
                 },
                 {
-                    text: '1300',
+                    text: '13:00',
                     value: '13',
                 },
                 {
-                    text: '1400',
+                    text: '14:00',
                     value: '14',
                 },
                 {
-                    text: '1500',
+                    text: '15:00',
                     value: '15',
                 },
                 {
-                    text: '1600',
+                    text: '16:00',
                     value: '16',
                 },
                 {
-                    text: '1700',
+                    text: '17:00',
                     value: '17',
                 },
                 {
-                    text: '1800',
+                    text: '18:00',
                     value: '18',
                 },
                 {
-                    text: '1900',
+                    text: '19:00',
                     value: '19',
                 },
                 {
-                    text: '2000',
+                    text: '20:00',
                     value: '20',
                 },
                 {
-                    text: '2100',
+                    text: '21:00',
                     value: '21',
                 },
                 {
-                    text: '2200',
+                    text: '22:00',
                     value: '22',
                 },
                 {
-                    text: '2300',
+                    text: '23:00',
                     value: '23',
                 },
                 {
-                    text: '2400',
+                    text: '24:00',
                     value: '24',
                 },
                 ],

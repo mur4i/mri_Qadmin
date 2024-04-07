@@ -18,12 +18,13 @@ files {
 
 shared_scripts {
     '@ox_lib/init.lua',
-    '@qbx_core/modules/utils.lua',
+	'@qbx_core/modules/lib.lua',
+   -- '@qbx_core/modules/utils.lua',
     'locales/locale.lua',
     'locales/pt-br.lua', -- Can change to other languages available in locales folder
     'config.lua',
     'compat/qbcore.lua', -- If using ESX uncomment line below & comment this line
-    --'compat/esx18.lua', -- If using ESX comment line above & uncomment this line
+	--'compat/esx18.lua', -- If using ESX comment line above & uncomment this line
 }
 
 server_scripts {

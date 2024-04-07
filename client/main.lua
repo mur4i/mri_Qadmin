@@ -416,7 +416,9 @@ RegisterNetEvent("919-admin:client:RequestSpectate", function(playerServerId, tg
 end)
 
 RegisterNetEvent("919-admin:client:RequestInventory", function(TargetId)
-    Compat.OpenInventory(TargetId)
+    local targetPlayer = GetPlayerServerId(NetworkGetPlayerIndexFromPed(TargetId))
+            if not targetPlayer then return end
+            exports.ox_inventory:openInventory("player", targetPlayer)
 end)
   
 RegisterNetEvent("919-admin:client:setLivery", function(livery)
@@ -1300,9 +1302,9 @@ RegisterNUICallback("Action", function(info)
         Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
             AdminPanel.NoRagdoll = not AdminPanel.NoRagdoll
             if AdminPanel.NoRagdoll then
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success",  "<strong>"..Lang:t("alerts.enabled").."</strong>  "..Lang:t("alerts.jumpOn"))
+                TriggerEvent("919-admin:client:ShowPanelAlert", "success",  "<strong>"..Lang:t("alerts.enabled").."</strong>  "..Lang:t("alerts.ragdollOn"))
             else
-                TriggerEvent("919-admin:client:ShowPanelAlert", "danger",  "<strong>"..Lang:t("alerts.disabled").."</strong>  "..Lang:t("alerts.jumpOff"))
+                TriggerEvent("919-admin:client:ShowPanelAlert", "danger",  "<strong>"..Lang:t("alerts.disabled").."</strong>  "..Lang:t("alerts.ragdollOff"))
             end
         end, "noragdoll")
     elseif info["action"] == "infinitestam" then
