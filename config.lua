@@ -20,7 +20,7 @@ Config.AdminPanelKey                        = "0"
 Config.ShowNamesKey                         = "8"
 
 Config.EnableAdminPanelCommand              = true                  -- Whether to enable the admin panel command (/a by default)
-Config.AdminPanelCommand                    = "admin"
+Config.AdminPanelCommand                    = "adm"
 
 Config.NoClipType                           = 4                     -- 1 (default) NEW txAdmin-like NoClip system, or 2 for old style 919Admin NoClip system, or 3 for default qbcore NoClip system
 
