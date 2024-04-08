@@ -45,7 +45,7 @@ Config.NamesOverSelfHead                    = true                  -- Whether o
 Config.FuelScript                           = 'cdn-fuel'
 
 Config.Permissions = {
-    ["god"] = {
+    ["admin"] = {
         AllowedActions = {
             "resourcepage", -- Access the Resource control page
             "kickall", -- Kick all players
@@ -77,7 +77,7 @@ Config.Permissions = {
             "skinmenu", -- Give a player the skin menu
         },
     },
-    ["admin"] = {
+    ["mod"] = {
         AllowedActions = {
             "characterspage", -- Access the All Characters page
             "deletecharacter", -- Delete a character
@@ -132,7 +132,7 @@ Config.Permissions = {
             "banspage", -- Access the bans page
         },
     },
-    ["mod"] = {
+    ["support"] = {
         Power = 50,
         AllowedActions = {
             "adminmenu", -- Open the admin menu
