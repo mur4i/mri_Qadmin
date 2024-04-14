@@ -50,13 +50,13 @@ AdminPanel.DeleteEntity = function(entity)
     if ( DoesEntityExist( entity ) ) then 
         DeleteEntity(entity)
         if ( DoesEntityExist( entity ) ) then 
-            TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>ERROR:</strong> Entity could not be deleted.")
+            TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>ERROR:</strong> Entity could not be deleted.")
             return false
         else 
-            TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>SUCCESS:</strong> Entity deleted.")
+            TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>SUCCESS:</strong> Entity deleted.")
         end
     else 
-        TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>SUCCESS:</strong> Entity deleted.")
+        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>SUCCESS:</strong> Entity deleted.")
     end
 end
 

@@ -28,13 +28,13 @@ local ShowNames = false
 
 CreateThread(function()
     Wait(50)
-    local DM = GetResourceKvpInt("919-admin:setting:darkmode")
+    local DM = GetResourceKvpInt("mri_Qadmin:setting:darkmode")
     if DM == 1 then DM = true elseif DM == 0 then DM = false end
-    local ST = GetResourceKvpInt("919-admin:setting:seethrough")
+    local ST = GetResourceKvpInt("mri_Qadmin:setting:seethrough")
     if ST == 1 then ST = true elseif ST == 0 then ST = false end
-    local NT = GetResourceKvpInt("919-admin:setting:notifications")
+    local NT = GetResourceKvpInt("mri_Qadmin:setting:notifications")
     if NT == 1 then NT = true elseif NT == 0 then NT = false end
-    local theme = GetResourceKvpInt("919-admin:setting:theme")
+    local theme = GetResourceKvpInt("mri_Qadmin:setting:theme")
     AdminPanel.Settings = {DarkMode = DM, SeeThrough = ST, Notifications = NT, Theme = theme}
     print("Configurações do painel admin carregadas! [Discord .mur4i]")
 end)
@@ -44,30 +44,30 @@ local curRotation = 0
 local curHeading = 0
 
 RegisterCommand("*adminpanel", function()
-    --TriggerServerEvent("919-admin:server:RefreshMenu", true)
-    --Wait(200)
-    TriggerServerEvent("919-admin:server:RequestPanel")
+    -- TriggerServerEvent("mri_Qadmin:server:RefreshMenu", true)
+    -- Wait(200)
+    TriggerServerEvent("mri_Qadmin:server:RequestPanel")
 end, false)
 RegisterKeyMapping("*adminpanel", "(mri-Qadmin)", "keyboard", Config.AdminPanelKey)
 
 RegisterCommand("*noclip", function()
-    TriggerServerEvent("919-admin:server:RequestNoClip")
+    TriggerServerEvent("mri_Qadmin:server:RequestNoClip")
 end, false)
 RegisterKeyMapping("*noclip", Lang:t("commands.noclip").."(mri-Qadmin)", "keyboard", Config.NoClipKey)
 
 RegisterCommand("*showNames", function()
     if Config.EnableNames then
         if not Config.AllPlayersUseNames then
-            Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+            Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
                 AdminPanel.DisplayingNames = not AdminPanel.DisplayingNames
                 if AdminPanel.DisplayingNames then
                     ShowNames = true
                     toggleNames()
-                    -- TriggerServerEvent("919-admin:server:GetPlayersForBlips")
+                    -- TriggerServerEvent("mri_Qadmin:server:GetPlayersForBlips")
                 else
                     ShowNames = false
                     toggleNames()
-                    -- TriggerServerEvent("919-admin:server:GetPlayersForBlips")
+                    -- TriggerServerEvent("mri_Qadmin:server:GetPlayersForBlips")
                 end
             end, "playernames")
         else
@@ -75,11 +75,11 @@ RegisterCommand("*showNames", function()
             if AdminPanel.DisplayingNames then
                 ShowNames = true
                 toggleNames()
-                -- TriggerServerEvent("919-admin:server:GetPlayersForBlips")
+                -- TriggerServerEvent("mri_Qadmin:server:GetPlayersForBlips")
             else
                 ShowNames = false
                 toggleNames()
-                -- TriggerServerEvent("919-admin:server:GetPlayersForBlips")
+                -- TriggerServerEvent("mri_Qadmin:server:GetPlayersForBlips")
             end
         end
     end
@@ -96,7 +96,7 @@ if Config.EnableReportCommand then
     end, false)
 end
 
-RegisterNetEvent("919-admin:client:ToggleNoClip", function()
+RegisterNetEvent("mri_Qadmin:client:ToggleNoClip", function()
     if Config.NoClipType == 2 then
         local x, y, z = table.unpack(GetEntityCoords(PlayerPedId(), false))
         curLocation = { x = x, y = y, z = z }
@@ -116,13 +116,13 @@ RegisterNetEvent("919-admin:client:ToggleNoClip", function()
         -- toggleNoClipMode(AdminPanel.NewNoClip)
     end
     if AdminPanel.NewNoClip or AdminPanel.NoClip then
-        TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong>"..Lang:t("alerts.noclipEnabled"))
+        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong>"..Lang:t("alerts.noclipEnabled"))
     else
-        TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.disabled").."</strong>"..Lang:t("alerts.noclipDisabled"))
+        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.disabled").."</strong>"..Lang:t("alerts.noclipDisabled"))
     end
 end)
 
-RegisterNetEvent("919-admin:client:OpenMenu", function(playerList, ServerInformation, MaxPlayers, Version, hasPerms, Role)
+RegisterNetEvent("mri_Qadmin:client:OpenMenu", function(playerList, ServerInformation, MaxPlayers, Version, hasPerms, Role)
     SendNUIMessage({
         action = "open",
         name = GetPlayerName(PlayerId()),
@@ -142,7 +142,7 @@ RegisterNetEvent("919-admin:client:OpenMenu", function(playerList, ServerInforma
     SetNuiFocus(true,true)
 end)
 
-RegisterNetEvent("919-admin:client:RefreshMenu", function(playerList, silent)
+RegisterNetEvent("mri_Qadmin:client:RefreshMenu", function(playerList, silent)
     SendNUIMessage({
         action = "refresh",
         name = GetPlayerName(PlayerId()),
@@ -150,11 +150,11 @@ RegisterNetEvent("919-admin:client:RefreshMenu", function(playerList, silent)
         serverData = AdminPanel.ServerInformation,
     })
     if not silent then
-        TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.playerListRefreshed"))
+        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.playerListRefreshed"))
     end
 end)
 
-RegisterNetEvent("919-admin:client:ViewPlayer", function(online, playerData)
+RegisterNetEvent("mri_Qadmin:client:ViewPlayer", function(online, playerData)
     if online then
         SendNUIMessage({
             action = "viewonlineplayer",
@@ -171,13 +171,13 @@ RegisterNetEvent("919-admin:client:ViewPlayer", function(online, playerData)
     DebugTrace("Received player data. Online: "..(online and "yes" or "no"))
 end)
 
-RegisterNetEvent("919-admin:client:ResetMenu", function()
+RegisterNetEvent("mri_Qadmin:client:ResetMenu", function()
     SendNUIMessage({
         action = "noperms"
     })
 end)
 
-RegisterNetEvent("919-admin:client:WarnPlayer", function(warnedBy, reason)
+RegisterNetEvent("mri_Qadmin:client:WarnPlayer", function(warnedBy, reason)
     SendNUIMessage({
         action = "showwarning",
         by = warnedBy,
@@ -188,16 +188,16 @@ RegisterNetEvent("919-admin:client:WarnPlayer", function(warnedBy, reason)
 end)
 
 RegisterNUICallback("GiveItem", function(data)
-    TriggerServerEvent("919-admin:server:GiveItem", data.Id, data.Item, data.Amount)
+    TriggerServerEvent("mri_Qadmin:server:GiveItem", data.Id, data.Item, data.Amount)
 end)
 
 RegisterNUICallback("SpawnVehicle", function(data)
-    TriggerServerEvent("919-admin:server:RequestVehicleSpawn", data.Vehicle)
+    TriggerServerEvent("mri_Qadmin:server:RequestVehicleSpawn", data.Vehicle)
 end)
 
 RegisterNUICallback("ReportReply", function(data)
     if data ~= nil then
-        TriggerServerEvent("919-admin:server:ReportReply", data)
+        TriggerServerEvent("mri_Qadmin:server:ReportReply", data)
     end
 end)
 
@@ -206,7 +206,7 @@ RegisterNUICallback("ExitWarn", function()
     FreezeEntityPosition(PlayerPedId(), false)
 end)
 
-RegisterNetEvent("919-admin:client:ShowPanelAlert", function(type, text)
+RegisterNetEvent("mri_Qadmin:client:ShowPanelAlert", function(type, text)
     if type == "success" then 
         PlaySoundFrontend(-1, "Confirm", "GTAO_Exec_SecuroServ_Warehouse_PC_Sounds", true)
     elseif type == "danger" or type == "warning" or type == "error" then
@@ -219,7 +219,7 @@ RegisterNetEvent("919-admin:client:ShowPanelAlert", function(type, text)
     })
 end)
 
-RegisterNetEvent("919-admin:client:ShowReportAlert", function(title, text)
+RegisterNetEvent("mri_Qadmin:client:ShowReportAlert", function(title, text)
     PlaySoundFrontend(-1, "Cancel", "GTAO_Exec_SecuroServ_Warehouse_PC_Sounds", true)
     SendNUIMessage({
         action = "showreportalert",
@@ -228,11 +228,11 @@ RegisterNetEvent("919-admin:client:ShowReportAlert", function(title, text)
     })
 end)
 
-RegisterNetEvent("919-admin:client:ForceReloadResources", function()
-    TriggerServerEvent("919-admin:server:RequestResourcePageInfo")
+RegisterNetEvent("mri_Qadmin:client:ForceReloadResources", function()
+    TriggerServerEvent("mri_Qadmin:server:RequestResourcePageInfo")
 end)
 
-RegisterNetEvent("919-admin:client:ReceiveJobPageInfo", function(JobPageInfo)
+RegisterNetEvent("mri_Qadmin:client:ReceiveJobPageInfo", function(JobPageInfo)
     DebugTrace("Received job page info")
     SendNUIMessage({
         action = "jobinfo",
@@ -240,7 +240,7 @@ RegisterNetEvent("919-admin:client:ReceiveJobPageInfo", function(JobPageInfo)
     })
 end)
 
-RegisterNetEvent("919-admin:client:ReceiveGangPageInfo", function(GangPageInfo)
+RegisterNetEvent("mri_Qadmin:client:ReceiveGangPageInfo", function(GangPageInfo)
     DebugTrace("Received gang page info")
     SendNUIMessage({
         action = "ganginfo",
@@ -248,7 +248,7 @@ RegisterNetEvent("919-admin:client:ReceiveGangPageInfo", function(GangPageInfo)
     })
 end)
 
-RegisterNetEvent("919-admin:client:ReceiveResourcePageInfo", function(ResourcePageInfo)
+RegisterNetEvent("mri_Qadmin:client:ReceiveResourcePageInfo", function(ResourcePageInfo)
     DebugTrace("Received resource page info")
     SendNUIMessage({
         action = "resourceinfo",
@@ -256,7 +256,7 @@ RegisterNetEvent("919-admin:client:ReceiveResourcePageInfo", function(ResourcePa
     })
 end)
 
-RegisterNetEvent("919-admin:client:ReceiveBansInfo", function(BansInfo)
+RegisterNetEvent("mri_Qadmin:client:ReceiveBansInfo", function(BansInfo)
     DebugTrace("Received bans page info")
     SendNUIMessage({
         action = "bansinfo",
@@ -264,7 +264,7 @@ RegisterNetEvent("919-admin:client:ReceiveBansInfo", function(BansInfo)
     })
 end)
 
-RegisterNetEvent("919-admin:client:ReceiveReportsInfo", function(ReportsInfo)
+RegisterNetEvent("mri_Qadmin:client:ReceiveReportsInfo", function(ReportsInfo)
     DebugTrace("Received reports page info")
     SendNUIMessage({
         action = "reportsinfo",
@@ -272,7 +272,7 @@ RegisterNetEvent("919-admin:client:ReceiveReportsInfo", function(ReportsInfo)
     })
 end)
 
-RegisterNetEvent("919-admin:client:ReceiveAdminChat", function(AdminChat)
+RegisterNetEvent("mri_Qadmin:client:ReceiveAdminChat", function(AdminChat)
     DebugTrace("Received admin chat")
     SendNUIMessage({
         action = "adminchat",
@@ -280,7 +280,7 @@ RegisterNetEvent("919-admin:client:ReceiveAdminChat", function(AdminChat)
     })
 end)
 
-RegisterNetEvent("919-admin:client:ReceiveVehiclesInfo", function(VehiclesInfo)
+RegisterNetEvent("mri_Qadmin:client:ReceiveVehiclesInfo", function(VehiclesInfo)
     DebugTrace("Received vehicles page info")
     SendNUIMessage({
         action = "vehiclesinfo",
@@ -288,7 +288,7 @@ RegisterNetEvent("919-admin:client:ReceiveVehiclesInfo", function(VehiclesInfo)
     })
 end)
 
-RegisterNetEvent("919-admin:client:ReceiveLeaderboardInfo", function(money, vehicles)
+RegisterNetEvent("mri_Qadmin:client:ReceiveLeaderboardInfo", function(money, vehicles)
     DebugTrace("Received leaderboard page info")
     SendNUIMessage({
         action = "leaderboardinfo",
@@ -297,7 +297,7 @@ RegisterNetEvent("919-admin:client:ReceiveLeaderboardInfo", function(money, vehi
     })
 end)
 
-RegisterNetEvent("919-admin:client:ReceiveItemsInfo", function(ItemsInfo)
+RegisterNetEvent("mri_Qadmin:client:ReceiveItemsInfo", function(ItemsInfo)
     DebugTrace("Received items page info")
     SendNUIMessage({
         action = "itemsinfo",
@@ -306,7 +306,7 @@ RegisterNetEvent("919-admin:client:ReceiveItemsInfo", function(ItemsInfo)
 end)
 
 
-RegisterNetEvent("919-admin:client:ReceiveCharacters", function(players)
+RegisterNetEvent("mri_Qadmin:client:ReceiveCharacters", function(players)
     DebugTrace("Received characters page info")
     SendNUIMessage({
         action = "characterslist",
@@ -314,7 +314,7 @@ RegisterNetEvent("919-admin:client:ReceiveCharacters", function(players)
     })
 end)
 
-RegisterNetEvent("919-admin:client:ReceiveCurrentLogs", function(currentLogs)
+RegisterNetEvent("mri_Qadmin:client:ReceiveCurrentLogs", function(currentLogs)
     AdminPanel.CurrentLogs = currentLogs
     SendNUIMessage({
         action = "logslist",
@@ -322,19 +322,19 @@ RegisterNetEvent("919-admin:client:ReceiveCurrentLogs", function(currentLogs)
     })
 end)
 
-RegisterNetEvent("919-admin:client:ToggleBlips", function()
+RegisterNetEvent("mri_Qadmin:client:ToggleBlips", function()
     --COME BACK HERE
 end)
 
-RegisterNetEvent("919-admin:client:ViewWarnings", function(warnings)
-    DebugTrace("[919-admin:client:ViewWarnings] Received warnings")
+RegisterNetEvent("mri_Qadmin:client:ViewWarnings", function(warnings)
+    DebugTrace("[mri_Qadmin:client:ViewWarnings] Received warnings")
     SendNUIMessage({
         action = "viewwarnings",
         warnings = warnings,
     })
 end)
 
-RegisterNetEvent("919-admin:client:SetPedModel", function(model)
+RegisterNetEvent("mri_Qadmin:client:SetPedModel", function(model)
     if model then
         Citizen.CreateThread(function()
             model = GetHashKey(model)
@@ -349,7 +349,7 @@ RegisterNetEvent("919-admin:client:SetPedModel", function(model)
     end
 end)
 
-RegisterNetEvent("919-admin:client:DeleteAllEntities", function(entityType)
+RegisterNetEvent("mri_Qadmin:client:DeleteAllEntities", function(entityType)
     if entityType == 1 then
         for vehicle in EnumerateVehicles() do
             if (not IsPedAPlayer(GetPedInVehicleSeat(vehicle, -1))) then 
@@ -382,7 +382,7 @@ RegisterNetEvent("919-admin:client:DeleteAllEntities", function(entityType)
     end
 end)
 
-RegisterNetEvent("919-admin:client:RequestSpectate", function(playerServerId, tgtCoords, name)
+RegisterNetEvent("mri_Qadmin:client:RequestSpectate", function(playerServerId, tgtCoords, name)
 	local localPlayerPed = PlayerPedId()
     AdminPanel.SpectatingPlayer = name
     AdminPanel.SpectatingID = playerServerId
@@ -415,25 +415,25 @@ RegisterNetEvent("919-admin:client:RequestSpectate", function(playerServerId, tg
     end
 end)
 
-RegisterNetEvent("919-admin:client:RequestInventory", function(TargetId)
+RegisterNetEvent("mri_Qadmin:client:RequestInventory", function(TargetId)
     local targetPlayer = GetPlayerServerId(NetworkGetPlayerIndexFromPed(TargetId))
             if not targetPlayer then return end
             exports.ox_inventory:openInventory("player", targetPlayer)
 end)
   
-RegisterNetEvent("919-admin:client:setLivery", function(livery)
+RegisterNetEvent("mri_Qadmin:client:setLivery", function(livery)
     local Veh = GetVehiclePedIsIn(PlayerPedId())
     if Veh then
         SetVehicleLivery(Veh, livery)
     end
 end)
 
-RegisterNetEvent("919-admin:client:SetPosition", function(coords)
+RegisterNetEvent("mri_Qadmin:client:SetPosition", function(coords)
     local ped = PlayerPedId()
     SetEntityCoords(ped, coords.x, coords.y, coords.z)
 end)
 
-RegisterNetEvent("919-admin:client:Freeze", function()
+RegisterNetEvent("mri_Qadmin:client:Freeze", function()
     AdminPanel.isFrozen = not AdminPanel.isFrozen
     local ped = PlayerPedId()
     local veh = GetVehiclePedIsIn(ped)
@@ -446,11 +446,11 @@ RegisterNetEvent("919-admin:client:Freeze", function()
     end
 end)
 
-RegisterNetEvent("919-admin:client:SendReport", function(name, src, msg, subject)
-    TriggerServerEvent("919-admin:server:SendReport", name, src, msg, subject)
+RegisterNetEvent("mri_Qadmin:client:SendReport", function(name, src, msg, subject)
+    TriggerServerEvent("mri_Qadmin:server:SendReport", name, src, msg, subject)
 end)
 
-RegisterNetEvent("919-admin:client:SaveCar", function(senderId)
+RegisterNetEvent("mri_Qadmin:client:SaveCar", function(senderId)
     local ped = PlayerPedId()
     local veh = GetVehiclePedIsIn(ped)
 
@@ -460,7 +460,7 @@ RegisterNetEvent("919-admin:client:SaveCar", function(senderId)
         local hash = props.model
         local vehname = GetDisplayNameFromVehicleModel(hash):lower()
         if QBCore.Shared.Vehicles[vehname] ~= nil and next(QBCore.Shared.Vehicles[vehname]) ~= nil then
-            TriggerServerEvent("919-admin:server:SaveCar", props, QBCore.Shared.Vehicles[vehname], `veh`, plate, senderId)
+            TriggerServerEvent("mri_Qadmin:server:SaveCar", props, QBCore.Shared.Vehicles[vehname], `veh`, plate, senderId)
         else
             QBCore.Functions.Notify(Lang:t("notify.cantStoreVehicle"), "error")
         end
@@ -469,7 +469,7 @@ RegisterNetEvent("919-admin:client:SaveCar", function(senderId)
     end
 end)
 
-RegisterNetEvent("919-admin:client:SetModel", function(skin)
+RegisterNetEvent("mri_Qadmin:client:SetModel", function(skin)
     local ped = PlayerPedId()
     local model = GetHashKey(skin)
 
@@ -490,7 +490,7 @@ RegisterNetEvent("919-admin:client:SetModel", function(skin)
 	SetEntityInvincible(ped, false)
 end)
 
-RegisterNetEvent("919-admin:client:MassDespawn", function ()
+RegisterNetEvent("mri_Qadmin:client:MassDespawn", function ()
     for vehicle in EnumerateVehicles() do
         if (not IsPedAPlayer(GetPedInVehicleSeat(vehicle, -1))) then 
             SetVehicleHasBeenOwnedByPlayer(vehicle, false) 
@@ -503,7 +503,7 @@ RegisterNetEvent("919-admin:client:MassDespawn", function ()
     end
 end)
 
-RegisterNetEvent("919-admin:client:MassPedDespawn", function ()
+RegisterNetEvent("mri_Qadmin:client:MassPedDespawn", function ()
     for ped in EnumeratePeds() do
         if (not IsPedAPlayer(ped)) then 
             SetEntityAsMissionEntity(ped, false, false) 
@@ -515,7 +515,7 @@ RegisterNetEvent("919-admin:client:MassPedDespawn", function ()
     end
 end)
 
-RegisterNetEvent("919-admin:client:MassObjDespawn", function ()
+RegisterNetEvent("mri_Qadmin:client:MassObjDespawn", function ()
     for object in EnumerateObjects() do
         if (IsEntityAnObject(object)) then 
             SetEntityAsMissionEntity(object, false, false) 
@@ -527,7 +527,7 @@ RegisterNetEvent("919-admin:client:MassObjDespawn", function ()
     end
 end)
 
-RegisterNetEvent("919-admin:client:MassEverythingDespawn", function ()
+RegisterNetEvent("mri_Qadmin:client:MassEverythingDespawn", function ()
     for entity in EnumerateEntities() do
         if (IsEntityAPed(entity)) then 
             if not IsPedAPlayer(entity) then
@@ -547,11 +547,11 @@ RegisterNetEvent("919-admin:client:MassEverythingDespawn", function ()
     end
 end)
 
-RegisterNetEvent("919-admin:client:SetNuiFocus", function(focus, mouse)
+RegisterNetEvent("mri_Qadmin:client:SetNuiFocus", function(focus, mouse)
     SetNuiFocus(focus, mouse)
 end)
 
-RegisterNetEvent("919-admin:client:ReceiveServerMetrics", function(serverMetrics)
+RegisterNetEvent("mri_Qadmin:client:ReceiveServerMetrics", function(serverMetrics)
     DebugTrace("Received server metrics")
     SendNUIMessage({
         action = "servermetrics",
@@ -564,94 +564,94 @@ end)
 
 RegisterNUICallback("close", function()
     SetNuiFocus(false, false)
-    TriggerServerEvent("919-admin:server:ClosePanel")
+    TriggerServerEvent("mri_Qadmin:server:ClosePanel")
     DebugTrace("NUICallback: close")
 end)
 
 RegisterNUICallback("LoadJobInfo", function()
-    TriggerServerEvent("919-admin:server:RequestJobPageInfo")
+    TriggerServerEvent("mri_Qadmin:server:RequestJobPageInfo")
     DebugTrace("NUICallback: LoadJobInfo")
 end)
 
 RegisterNUICallback("LoadGangInfo", function()
-    TriggerServerEvent("919-admin:server:RequestGangPageInfo")
+    TriggerServerEvent("mri_Qadmin:server:RequestGangPageInfo")
     DebugTrace("NUICallback: LoadGangInfo")
 end)
 
 RegisterNUICallback("LoadResourcesInfo", function()
-    TriggerServerEvent("919-admin:server:RequestResourcePageInfo")
+    TriggerServerEvent("mri_Qadmin:server:RequestResourcePageInfo")
     DebugTrace("NUICallback: LoadResourcesInfo")
 end)
 
 RegisterNUICallback("LoadServerMetrics", function()
-    TriggerServerEvent("919-admin:server:RequestServerMetrics")
+    TriggerServerEvent("mri_Qadmin:server:RequestServerMetrics")
     DebugTrace("NUICallback: LoadServerMetrics")
 end)
 
 RegisterNUICallback("LoadBansInfo", function()
-    TriggerServerEvent("919-admin:server:RequestBansInfo")
+    TriggerServerEvent("mri_Qadmin:server:RequestBansInfo")
     DebugTrace("NUICallback: LoadBansInfo")
 end)
 
 RegisterNUICallback("LoadReportsInfo", function()
-    TriggerServerEvent("919-admin:server:RequestReportsInfo")
+    TriggerServerEvent("mri_Qadmin:server:RequestReportsInfo")
     DebugTrace("NUICallback: LoadReportsInfo")
 end)
 
 RegisterNUICallback("LoadAdminChat", function()
-    TriggerServerEvent("919-admin:server:RequestAdminChat")
+    TriggerServerEvent("mri_Qadmin:server:RequestAdminChat")
     DebugTrace("NUICallback: LoadAdminChat")
 end)
 
 RegisterNUICallback("AdminChatSend", function(info)
-    TriggerServerEvent("919-admin:server:AdminChatSend", info["message"])
+    TriggerServerEvent("mri_Qadmin:server:AdminChatSend", info["message"])
     DebugTrace("NUICallback: AdminChatSend")
 end)
 
 RegisterNUICallback("LoadItemsInfo", function()
-    TriggerServerEvent("919-admin:server:RequestItemsInfo")
+    TriggerServerEvent("mri_Qadmin:server:RequestItemsInfo")
     DebugTrace("NUICallback: LoadItemsInfo")
 end)
 
 RegisterNUICallback("LoadVehiclesInfo", function()
-    TriggerServerEvent("919-admin:server:RequestVehiclesInfo")
+    TriggerServerEvent("mri_Qadmin:server:RequestVehiclesInfo")
     DebugTrace("NUICallback: LoadVehiclesInfo")
 end)
 
 RegisterNUICallback("LoadLeaderboardInfo", function()
-    TriggerServerEvent("919-admin:server:RequestLeaderboardInfo")
+    TriggerServerEvent("mri_Qadmin:server:RequestLeaderboardInfo")
     DebugTrace("NUICallback: LoadLeadeaderboardInfo")
 end)
 
 RegisterNUICallback("LoadLogs", function()
-    TriggerServerEvent("919-admin:server:RequestCurrentLogs")
+    TriggerServerEvent("mri_Qadmin:server:RequestCurrentLogs")
     DebugTrace("NUICallback: LoadLogs")
 end)
 
 RegisterNUICallback("LoadCharacters", function()
-    TriggerServerEvent("919-admin:server:RequestCharacters")
+    TriggerServerEvent("mri_Qadmin:server:RequestCharacters")
     DebugTrace("NUICallback: LoadCharacters")
 end)
 
 RegisterNUICallback("RequestViewPlayer", function(player)
-    TriggerServerEvent("919-admin:server:RequestViewPlayer", player)
+    TriggerServerEvent("mri_Qadmin:server:RequestViewPlayer", player)
     DebugTrace("NUICallback: RequestViewPlayer")
 end)
 
 RegisterNUICallback("SendReport", function(info)
-    TriggerServerEvent("919-admin:server:SendReport", info["subject"], info["info"], info["type"])
+    TriggerServerEvent("mri_Qadmin:server:SendReport", info["subject"], info["info"], info["type"])
     DebugTrace("NUICallback: SendReport")
 end)
 
 RegisterNUICallback("ResourceAction", function(info)
     local currentResource = info["resource"]
     if info["action"] == "start" or info["action"] == "stop" or info["action"] == "restart" then
-        TriggerServerEvent("919-admin:server:ResourceAction", currentResource, info["action"])
+        TriggerServerEvent("mri_Qadmin:server:ResourceAction", currentResource, info["action"])
     end
     DebugTrace("NUICallback: ResourceAction ["..info["action"].."]")
 end)
 
-RegisterNetEvent("919-admin:client:OpenSkinMenu1", function()
+RegisterNetEvent("mri_Qadmin:client:OpenSkinMenu1", function()
     if Config.ESXSkin == "AK" then
         exports["ak47_clothing"]:openOutfitMenu()
     else
@@ -755,88 +755,88 @@ RegisterNUICallback("Action", function(info)
     local currentPlayer = info["id"]
     if info["action"] == "uncuffSelf" then
         Compat.UncuffSelf()
-        TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.uncuffed"))
+        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.uncuffed"))
     elseif info["action"] == "revive" then
-        TriggerServerEvent("919-admin:server:RevivePlayer", currentPlayer)
+        TriggerServerEvent("mri_Qadmin:server:RevivePlayer", currentPlayer)
     elseif info["action"] == "goto" then
-        TriggerServerEvent("919-admin:server:GotoPlayer", currentPlayer)
+        TriggerServerEvent("mri_Qadmin:server:GotoPlayer", currentPlayer)
     elseif info["action"] == "bring" then
         local target = GetPlayerPed(currentPlayer)
         local plyCoords = GetEntityCoords(PlayerPedId())
-        TriggerServerEvent("919-admin:server:BringPlayer", currentPlayer, plyCoords)
+        TriggerServerEvent("mri_Qadmin:server:BringPlayer", currentPlayer, plyCoords)
     elseif info["action"] == "sendtolegion" then
-        TriggerServerEvent("919-admin:server:SetPosition", currentPlayer, 215.75, -804.26, 30.81)
-        TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.senToLegion"))
+        TriggerServerEvent("mri_Qadmin:server:SetPosition", currentPlayer, 215.75, -804.26, 30.81)
+        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.senToLegion"))
     elseif info["action"] == "sendtopillbox" then
-        TriggerServerEvent("919-admin:server:SetPosition", currentPlayer, 299.01, -577.48, 43.26)
-        TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentToPillbox"))
+        TriggerServerEvent("mri_Qadmin:server:SetPosition", currentPlayer, 299.01, -577.48, 43.26)
+        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentToPillbox"))
     elseif info["action"] == "sendtolsc" then
-        TriggerServerEvent("919-admin:server:SetPosition", currentPlayer, -366.58, -126.01, 38.69)
-        TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentToCustoms"))
+        TriggerServerEvent("mri_Qadmin:server:SetPosition", currentPlayer, -366.58, -126.01, 38.69)
+        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentToCustoms"))
     elseif info["action"] == "sendtomrpd" then
-        TriggerServerEvent("919-admin:server:SetPosition", currentPlayer, 415.41, -993.4, 29.38)
-        TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentToMRPD"))
+        TriggerServerEvent("mri_Qadmin:server:SetPosition", currentPlayer, 415.41, -993.4, 29.38)
+        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentToMRPD"))
     elseif info["action"] == "sendtosandy" then
-        TriggerServerEvent("919-admin:server:SetPosition", currentPlayer, 1963.56, 3735.19, 32.2)
-        TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentToSandy"))
+        TriggerServerEvent("mri_Qadmin:server:SetPosition", currentPlayer, 1963.56, 3735.19, 32.2)
+        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentToSandy"))
     elseif info["action"] == "sendtograpeseed" then
-        TriggerServerEvent("919-admin:server:SetPosition", currentPlayer, 1692.89, 4942.49, 42.32)
-        TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentToGrapeseed"))
+        TriggerServerEvent("mri_Qadmin:server:SetPosition", currentPlayer, 1692.89, 4942.49, 42.32)
+        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentToGrapeseed"))
     elseif info["action"] == "sendtopaleto" then
-        TriggerServerEvent("919-admin:server:SetPosition", currentPlayer, 125.64, 6611.6, 31.86)
-        TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentToPaleto"))
+        TriggerServerEvent("mri_Qadmin:server:SetPosition", currentPlayer, 125.64, 6611.6, 31.86)
+        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentToPaleto"))
     elseif info["action"] == "sendtolsia" then
-        TriggerServerEvent("919-admin:server:SetPosition", currentPlayer, -1021.81, -2701.25, 13.76)
-        TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentToLSA"))
+        TriggerServerEvent("mri_Qadmin:server:SetPosition", currentPlayer, -1021.81, -2701.25, 13.76)
+        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentToLSA"))
     elseif info["action"] == "kill" then
-        TriggerServerEvent("919-admin:server:KillPlayer", currentPlayer)
+        TriggerServerEvent("mri_Qadmin:server:KillPlayer", currentPlayer)
     elseif info["action"] == "cuff" then
-        TriggerServerEvent("919-admin:server:CuffPlayer", currentPlayer)
+        TriggerServerEvent("mri_Qadmin:server:CuffPlayer", currentPlayer)
     elseif info["action"] == "save" then
-        TriggerServerEvent("919-admin:server:SavePlayer", currentPlayer)
+        TriggerServerEvent("mri_Qadmin:server:SavePlayer", currentPlayer)
     elseif info["action"] == "clothing" then
-        TriggerServerEvent("919-admin:server:OpenSkinMenu", currentPlayer)
+        TriggerServerEvent("mri_Qadmin:server:OpenSkinMenu", currentPlayer)
     elseif info["action"] == "sclothing" then
         SendNUIMessage({
             action = "close"
         })
         SetNuiFocus(false, false)
-        TriggerServerEvent("919-admin:server:OpenSkinMenu", GetPlayerServerId(PlayerId()))
+        TriggerServerEvent("mri_Qadmin:server:OpenSkinMenu", GetPlayerServerId(PlayerId()))
     elseif info["action"] == "feed" then
-        TriggerServerEvent("919-admin:server:FeedPlayer", currentPlayer)
+        TriggerServerEvent("mri_Qadmin:server:FeedPlayer", currentPlayer)
         Citizen.Wait(50)
-        TriggerServerEvent("919-admin:server:RefreshMenu", true)
+        TriggerServerEvent("mri_Qadmin:server:RefreshMenu", true)
     elseif info["action"] == "stress" then
-        TriggerServerEvent("919-admin:server:RelieveStress", currentPlayer)
+        TriggerServerEvent("mri_Qadmin:server:RelieveStress", currentPlayer)
         Citizen.Wait(50)
-        TriggerServerEvent("919-admin:server:RefreshMenu", true)
+        TriggerServerEvent("mri_Qadmin:server:RefreshMenu", true)
     elseif info["action"] == "openinv" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             SendNUIMessage({
                 action = "close"
             })
             SetNuiFocus(false, false)
-            TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.openingPlayerInv"))
-            TriggerEvent("919-admin:client:RequestInventory", currentPlayer)
+            TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.openingPlayerInv"))
+            TriggerEvent("mri_Qadmin:client:RequestInventory", currentPlayer)
         end, "openinventory")
     elseif info["action"] == "clearinv" then
-        TriggerServerEvent("919-admin:server:ClearInventory", currentPlayer)
+        TriggerServerEvent("mri_Qadmin:server:ClearInventory", currentPlayer)
     elseif info["action"] == "screenshot" then
-        TriggerServerEvent("919-admin:server:ScreenshotSubmit", currentPlayer)
+        TriggerServerEvent("mri_Qadmin:server:ScreenshotSubmit", currentPlayer)
     elseif info["action"] == "spectate" then
-        TriggerServerEvent("919-admin:server:RequestSpectate", currentPlayer)
+        TriggerServerEvent("mri_Qadmin:server:RequestSpectate", currentPlayer)
         SendNUIMessage({
             action = "close"
         })
         SetNuiFocus(false, false)
     elseif info["action"] == "freeze" then
-        TriggerServerEvent("919-admin:server:Freeze", currentPlayer)
+        TriggerServerEvent("mri_Qadmin:server:Freeze", currentPlayer)
     elseif info["action"] == "revives" then
-        TriggerServerEvent("919-admin:server:RevivePlayer", GetPlayerServerId(PlayerId()))
+        TriggerServerEvent("mri_Qadmin:server:RevivePlayer", GetPlayerServerId(PlayerId()))
     elseif info["action"] == "sendback" then
-        TriggerServerEvent("919-admin:server:SendPlayerBack", currentPlayer)
+        TriggerServerEvent("mri_Qadmin:server:SendPlayerBack", currentPlayer)
     elseif info["action"] == "goback" then
-        TriggerServerEvent("919-admin:server:SendBackSelf")
+        TriggerServerEvent("mri_Qadmin:server:SendBackSelf")
     elseif info["action"] == "tpm" then
         if IsWaypointActive() then
             local WaypointHandle = GetFirstBlipInfoId(8)
@@ -857,99 +857,99 @@ RegisterNUICallback("Action", function(info)
 
                     Citizen.Wait(5)
                 end
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.tpm"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.tpm"))
             else
                 ESX.ShowNotification("Select Waypoint")
             end
         else
-            TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.noMarker"))
+            TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.noMarker"))
         end
     elseif info["action"] == "setpedmodel" then
         if info["model"] then
-            TriggerServerEvent("919-admin:server:SetPedModel", currentPlayer, info["model"])
+            TriggerServerEvent("mri_Qadmin:server:SetPedModel", currentPlayer, info["model"])
         end
     elseif info["action"] == "invisible" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             if not AdminPanel.isInvisible then
                 SetEntityVisible(PlayerPedId(), false, false)
                 AdminPanel.isInvisible = true
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong> "..Lang:t("alerts.invis"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong> "..Lang:t("alerts.invis"))
             else
                 SetEntityVisible(PlayerPedId(), true, false)
                 AdminPanel.isInvisible = false
-                TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.disabled").."</strong> "..Lang:t("alerts.vis"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.disabled").."</strong> "..Lang:t("alerts.vis"))
             end
         end, "invisibility")
     elseif info["action"] == "togradar" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             AdminPanel.DisplayingRadar = not AdminPanel.DisplayingRadar
             if AdminPanel.DisplayingRadar then
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong> "..Lang:t("alerts.radarOn"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong> "..Lang:t("alerts.radarOn"))
             else
-                TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.disabled").."</strong> "..Lang:t("alerts.radarOff"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.disabled").."</strong> "..Lang:t("alerts.radarOff"))
             end
         end, "forceradar")
     elseif info["action"] == "togblips" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             AdminPanel.DisplayingBlips = not AdminPanel.DisplayingBlips
             if AdminPanel.DisplayingBlips then
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong> "..Lang:t("alerts.blipsOn"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong> "..Lang:t("alerts.blipsOn"))
             else
-                TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.disabled").."</strong> "..Lang:t("alerts.blipsOff"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.disabled").."</strong> "..Lang:t("alerts.blipsOff"))
             end
         end, "playerblips")
     elseif info["action"] == "tognames" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             AdminPanel.DisplayingNames = not AdminPanel.DisplayingNames
             if AdminPanel.DisplayingNames then
                 ShowNames = true
-                -- TriggerServerEvent("919-admin:server:GetPlayersForBlips")
+                -- TriggerServerEvent("mri_Qadmin:server:GetPlayersForBlips")
                 toggleNames()
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong> "..Lang:t("alerts.NamesOn"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong> "..Lang:t("alerts.NamesOn"))
             else
                 ShowNames = false
-                -- TriggerServerEvent("919-admin:server:GetPlayersForBlips")
+                -- TriggerServerEvent("mri_Qadmin:server:GetPlayersForBlips")
                 toggleNames()
-                TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.disabled").."</strong> "..Lang:t("alerts.NamesOff"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.disabled").."</strong> "..Lang:t("alerts.NamesOff"))
             end
         end, "playerblips")
     elseif info["action"] == "togspeed" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             AdminPanel.FastSpeed = not AdminPanel.FastSpeed
             if AdminPanel.FastSpeed then
                 SetRunSprintMultiplierForPlayer(PlayerId(), 1.49)
                 SetSwimMultiplierForPlayer(PlayerId(), 1.49)
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong> "..Lang:t("alerts.RunOn"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong> "..Lang:t("alerts.RunOn"))
             else
                 SetRunSprintMultiplierForPlayer(PlayerId(), 1.0)
                 SetSwimMultiplierForPlayer(PlayerId(), 1.0)
-                TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.disabled").."</strong> "..Lang:t("alerts.RunOff"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.disabled").."</strong> "..Lang:t("alerts.RunOff"))
             end
         end, "fastrun")
     elseif info["action"] == "god" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             if not AdminPanel.GodMode then
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong> "..Lang:t("alerts.GodOn"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong> "..Lang:t("alerts.GodOn"))
                 godModeChange()
             else
-                TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.disabled").."</strong> "..Lang:t("alerts.GodOff"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.disabled").."</strong> "..Lang:t("alerts.GodOff"))
                 godModeChange()
             end
         end, "godmode")
     elseif info["action"] == "setmedriver" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             local vehicle = Compat.GetClosestVehicle()
             if vehicle then
                 if IsVehicleSeatFree(vehicle,-1) then
                     SetPedIntoVehicle(PlayerPedId(),vehicle,-1)
-                    TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.EnterVehicle"))
+                    TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.EnterVehicle"))
                 else
-                    TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.VehicleFull"))
+                    TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.VehicleFull"))
                 end
             end
         end, "setmedriver")
     elseif info["action"] == "setmepass" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             local vehicle = Compat.GetClosestVehicle()
             if vehicle then
                 if seat == nil then
@@ -961,66 +961,66 @@ RegisterNUICallback("Action", function(info)
                 end
                 if IsVehicleSeatFree(vehicle,seat) then
                     SetPedIntoVehicle(PlayerPedId(),vehicle,seat)
-                    TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.EnterVehicle"))
+                    TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.EnterVehicle"))
                 else
-                    TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.VehicleFull"))
+                    TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.VehicleFull"))
                 end
             end
         end, "setmepassenger")
     elseif info["action"] == "clearblood" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             ClearPedBloodDamage(PlayerPedId())
-            TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.bloodCleared"))
+            TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.bloodCleared"))
         end, "clearblood")
     elseif info["action"] == "wetclothes" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             SetPedWetnessHeight(PlayerPedId(), 2.0)
-            TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.clothesWet"))
+            TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.clothesWet"))
         end, "wetclothes")
     elseif info["action"] == "dryclothes" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             ClearPedWetness(PlayerPedId())
-            TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.clothesDry"))
+            TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.clothesDry"))
         end, "dryclothes")
     elseif info["action"] == "deleteclosestveh" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             local entity, distance = Compat.GetClosestVehicle()
             if entity then
                 if distance < 10.0 then
                     AdminPanel.DeleteEntity(entity)
                 else
-                    TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.vehicleFar"))
+                    TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.vehicleFar"))
                 end
             end
         end, "deleteclosestvehicle")
     elseif info["action"] == "deleteclosestped" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             local entity, distance = AdminPanel.GetClosestPedNotPlayer()
             if entity then
                 if not IsPedAPlayer(entity) then
                     if distance < 10.0 then
                         AdminPanel.DeleteEntity(entity)
                     else
-                        TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.pedFar"))
+                        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.pedFar"))
                     end
                 else
-                    TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.pedIsPlayer"))
+                    TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.pedIsPlayer"))
                 end
             end
         end, "deleteclosestped")
     elseif info["action"] == "deleteclosestobj" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             local entity, distance = Compat.GetClosestObject()
             if entity then
                 if distance < 10.0 then                
                     AdminPanel.DeleteEntity(entity)
                 else
-                    TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.objectFar"))
+                    TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.objectFar"))
                 end
             end
         end, "deleteclosestobject")
     elseif info["action"] == "repairv" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             local vehicle = Compat.GetClosestVehicle()
             if vehicle then
                 SetVehicleUndriveable(vehicle, false)
@@ -1031,39 +1031,39 @@ RegisterNUICallback("Action", function(info)
                 SetVehicleFixed(vehicle)
                 SetVehicleOnGroundProperly(vehicle)
                 SetVehicleGravity(vehicle, true)
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.repairedVehicle"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.repairedVehicle"))
             end
         end, "repairvehicle")
     elseif info["action"] == "wash" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             local vehicle = Compat.GetClosestVehicle()
             if vehicle then
                 SetVehicleDirtLevel(vehicle, 0)
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.washedVehicle"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.washedVehicle"))
             end
         end, "washvehicle")
     elseif info["action"] == "hotwire" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             local vehicle = GetVehiclePedIsIn(PlayerPedId())
             if vehicle then
                 exports["qb-vehiclekeys"]:SetVehicleKey(GetVehicleNumberPlateText(vehicle), true)
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.hotwireVehicle"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.hotwireVehicle"))
             end
         end, "hotwirevehicle")
     elseif info["action"] == "lockv" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             local vehicle = Compat.GetClosestVehicle()
             if vehicle then
                 SetVehicleDoorsLocked(vehicle, 2)
-                TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.lockedVehicle"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.lockedVehicle"))
             end
         end, "lockvehicle")
     elseif info["action"] == "unlockv" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             local vehicle = Compat.GetClosestVehicle()
             if vehicle then
                 SetVehicleDoorsLocked(vehicle, 1)
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.lockedVehicle"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.lockedVehicle"))
             end
         end, "unlockvehicle")
     elseif info["action"] == "spawnvehicle" then
@@ -1072,10 +1072,10 @@ RegisterNUICallback("Action", function(info)
                 action = "close"
             })
             SetNuiFocus(false, false)
-            TriggerServerEvent("919-admin:server:RequestVehicleSpawn", info["model"])
+            TriggerServerEvent("mri_Qadmin:server:RequestVehicleSpawn", info["model"])
         end
     elseif info["action"] == "maxpupgrades" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
             if vehicle then
                 SetVehicleModKit(vehicle, 0)
@@ -1088,7 +1088,7 @@ RegisterNUICallback("Action", function(info)
                 ToggleVehicleMod(vehicle, 18, true)
                 ToggleVehicleMod(vehicle, 19, true)
                 ToggleVehicleMod(vehicle, 21, true)
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.vehicleMaxPerformance"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.vehicleMaxPerformance"))
                 SendNUIMessage({
                     action = "close"
                 })
@@ -1096,7 +1096,7 @@ RegisterNUICallback("Action", function(info)
             end
         end, "maxperformanceupgrades")
     elseif info["action"] == "randvisualparts" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             local vehicle, distance = Compat.GetClosestVehicle()
             if vehicle then
                 if distance < 10.0 then
@@ -1105,38 +1105,38 @@ RegisterNUICallback("Action", function(info)
                         SetVehicleMod(vehicle, i, math.random(1, 4), true)
                     end
                     SetVehicleMod(vehicle, 49, math.random(1, 4), true)
-                    TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.vehicleRandomVisual"))
+                    TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.vehicleRandomVisual"))
                     SendNUIMessage({
                         action = "close"
                     })
                     SetNuiFocus(false, false)
                     --PlaySoundFrontend(-1, "CONTINUE", "HUD_FRONTEND_DEFAULT_SOUNDSET", false)
                 else
-                    TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.vehicleFar"))
+                    TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.vehicleFar"))
                 end
             end
         end, "randomvisualparts")
     elseif info["action"] == "setlivery" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             local vehicle, distance = Compat.GetClosestVehicle()
             if vehicle then
                 if distance < 10.0 then
                     if info["livery"] then
                         SetVehicleModKit(vehicle, 0)
                         SetVehicleMod(vehicle, 48, tonumber(info["livery"]), true)
-                        TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.liverySet").." "..GetLabelText(GetLiveryName(vehicle, tonumber(info["livery"])))..".")
+                        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.liverySet").." "..GetLabelText(GetLiveryName(vehicle, tonumber(info["livery"])))..".")
                         SendNUIMessage({
                             action = "close"
                         })
                         SetNuiFocus(false, false)
                     end
                 else
-                    TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.vehicleFar"))
+                    TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.vehicleFar"))
                 end
             end
         end, "setlivery")
     elseif info["action"] == "setcolor" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             if info["primarycolor"] and info["secondarycolor"] then
                 local PrimaryColor = info["primarycolor"]
                 local SecondaryColor = info["secondarycolor"]
@@ -1145,108 +1145,108 @@ RegisterNUICallback("Action", function(info)
                     if distance < 10.0 then
                         SetVehicleCustomPrimaryColour(vehicle, PrimaryColor.r, PrimaryColor.g, PrimaryColor.b)
                         SetVehicleCustomSecondaryColour(vehicle, SecondaryColor.r, SecondaryColor.g, SecondaryColor.b)
-                        TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.colorSet"))
+                        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.colorSet"))
                         SendNUIMessage({
                             action = "close"
                         })
                         SetNuiFocus(false, false)
                     else
-                        TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.vehicleFar"))
+                        TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.vehicleFar"))
                     end
                 end
             end
         end, "setcolor")
     elseif info["action"] == "filltank" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             local vehicle = Compat.GetClosestVehicle()
             if vehicle then
                 -- exports[Config.FuelScript]:SetFuel(vehicle, 100)
                 TriggerEvent("ox_fuel:createStatebag", vehicle, 100)
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.fuelSet"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.fuelSet"))
             end
         end, "fillgastank")
     elseif info["action"] == "kick" then       
-        TriggerServerEvent("919-admin:server:KickPlayer", currentPlayer, info["reason"])
+        TriggerServerEvent("mri_Qadmin:server:KickPlayer", currentPlayer, info["reason"])
     elseif info["action"] == "warn" then       
-        TriggerServerEvent("919-admin:server:WarnPlayer", currentPlayer, info["reason"], info["citizenid"])
+        TriggerServerEvent("mri_Qadmin:server:WarnPlayer", currentPlayer, info["reason"], info["citizenid"])
     elseif info["action"] == "checkwarn" then
-        TriggerServerEvent("919-admin:server:ViewWarnings", currentPlayer, info["citizenid"])
+        TriggerServerEvent("mri_Qadmin:server:ViewWarnings", currentPlayer, info["citizenid"])
     elseif info["action"] == "ban" then       
         info["timeamt"] = info["timeamt"] * 60 * 60
-        TriggerServerEvent("919-admin:server:BanPlayer", currentPlayer, info["timeamt"], info["reason"], info["citizenid"])
+        TriggerServerEvent("mri_Qadmin:server:BanPlayer", currentPlayer, info["timeamt"], info["reason"], info["citizenid"])
     elseif info["action"] == "givecash" or info["action"] == "removecash" or info["action"] == "givebank" or info["action"] == "removebank" then
         local cashAmount = tonumber(info["amount"])
-        TriggerServerEvent("919-admin:server:MonetaryAction", currentPlayer, info["action"], cashAmount)
+        TriggerServerEvent("mri_Qadmin:server:MonetaryAction", currentPlayer, info["action"], cashAmount)
         Citizen.Wait(50)
-        TriggerServerEvent("919-admin:server:RefreshMenu", true)
+        TriggerServerEvent("mri_Qadmin:server:RefreshMenu", true)
     elseif info["action"] == "setjob" then
-        TriggerServerEvent("919-admin:server:SetJob", currentPlayer, info["jobname"], info["jobgrade"])
+        TriggerServerEvent("mri_Qadmin:server:SetJob", currentPlayer, info["jobname"], info["jobgrade"])
         Citizen.Wait(50)
-        TriggerServerEvent("919-admin:server:RefreshMenu", true)
+        TriggerServerEvent("mri_Qadmin:server:RefreshMenu", true)
     elseif info["action"] == "giveitem" then
-        TriggerServerEvent("919-admin:server:GiveItem", currentPlayer, info["itemname"], info["itemamount"])
+        TriggerServerEvent("mri_Qadmin:server:GiveItem", currentPlayer, info["itemname"], info["itemamount"])
     elseif info["action"] == "setgang" then
-        TriggerServerEvent("919-admin:server:SetGang", currentPlayer, info["gangname"], info["ganggrade"])
+        TriggerServerEvent("mri_Qadmin:server:SetGang", currentPlayer, info["gangname"], info["ganggrade"])
         Citizen.Wait(50)
-        TriggerServerEvent("919-admin:server:RefreshMenu", true)
+        TriggerServerEvent("mri_Qadmin:server:RefreshMenu", true)
     elseif info["action"] == "loadipl" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             if info["ipl"] ~= "" and info["ipl"] ~= nil then
                 RequestIpl(info["ipl"])
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.iplReqested"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.iplReqested"))
             end
         end, "ipl")
     elseif info["action"] == "unloadipl" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             if info["ipl"] ~= "" and info["ipl"] ~= nil then
                 RemoveIpl(info["ipl"])
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.unloadIPL"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.unloadIPL"))
             end
         end, "ipl")
     elseif info["action"] == "setViewDistance" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             if hasPermission then
                 SetEntityViewDistance(info)
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.distanceChanged"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.distanceChanged"))
             end
         end, "setViewDistance")
     elseif info["action"] == "copyEntityInfo" then
         print("hi")
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             print(hasPermission)
             if hasPermission then
                 print("noice")
                 CopyToClipboard()
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.copied"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.copied"))
             end
         end, "copyEntityInfo")
         print("no u")
     elseif info["action"] == "freeaimMode" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             if hasPermission then
                 ToggleEntityFreeView()
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.freeaimTog"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.freeaimTog"))
             end
         end, "freeaimMode")
     elseif info["action"] == "displayVehicles" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             if hasPermission then
                 ToggleEntityVehicleView()
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.dispVeh"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.dispVeh"))
             end
         end, "displayVehicles")
     elseif info["action"] == "displayPeds" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             if hasPermission then
                 ToggleEntityPedView()
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.dispPeds"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.dispPeds"))
             end
         end, "displayPeds")
     elseif info["action"] == "displayObjects" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             if hasPermission then
                 ToggleEntityObjectView()
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.dispEnt"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.dispEnt"))
             end
         end, "displayObjects")
     elseif info["action"] == "vec3" then
@@ -1285,82 +1285,82 @@ RegisterNUICallback("Action", function(info)
         })
     elseif info["action"] == "setweather" then
         if info["weather"] ~= "" and info["weather"] ~= nil then
-            TriggerServerEvent("919-admin:server:SetWeather", info["weather"])
+            TriggerServerEvent("mri_Qadmin:server:SetWeather", info["weather"])
         end
     elseif info["action"] == "noclip" then
-        TriggerServerEvent("919-admin:server:RequestNoClip")
+        TriggerServerEvent("mri_Qadmin:server:RequestNoClip")
     elseif info["action"] == "superjump" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             AdminPanel.SuperJump = not AdminPanel.SuperJump
             if AdminPanel.SuperJump then
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong> "..Lang:t("alerts.jumpOn"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong> "..Lang:t("alerts.jumpOn"))
             else
-                TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>DISABLED:</strong> "..Lang:t("alerts.jumpOff"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>DISABLED:</strong> "..Lang:t("alerts.jumpOff"))
             end
         end, "superjump")
     elseif info["action"] == "noragdoll" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             AdminPanel.NoRagdoll = not AdminPanel.NoRagdoll
             if AdminPanel.NoRagdoll then
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success",  "<strong>"..Lang:t("alerts.enabled").."</strong>  "..Lang:t("alerts.ragdollOn"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success",  "<strong>"..Lang:t("alerts.enabled").."</strong>  "..Lang:t("alerts.ragdollOn"))
             else
-                TriggerEvent("919-admin:client:ShowPanelAlert", "danger",  "<strong>"..Lang:t("alerts.disabled").."</strong>  "..Lang:t("alerts.ragdollOff"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger",  "<strong>"..Lang:t("alerts.disabled").."</strong>  "..Lang:t("alerts.ragdollOff"))
             end
         end, "noragdoll")
     elseif info["action"] == "infinitestam" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             AdminPanel.InfiniteStamina = not AdminPanel.InfiniteStamina
             if AdminPanel.InfiniteStamina then
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong> "..Lang:t("alerts.infStamOn"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong> "..Lang:t("alerts.infStamOn"))
             else
-                TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.disabled").."</strong> "..Lang:t("alerts.infStamOff"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.disabled").."</strong> "..Lang:t("alerts.infStamOff"))
             end
         end, "infinitestam")
     elseif info["action"] == "settime" then
-        TriggerServerEvent("919-admin:server:SetTime", info["time"], info["time"])
+        TriggerServerEvent("mri_Qadmin:server:SetTime", info["time"], info["time"])
     elseif info["action"] == "reviveall" then
-        TriggerServerEvent("919-admin:server:ReviveAll")
+        TriggerServerEvent("mri_Qadmin:server:ReviveAll")
     elseif info["action"] == "messageall" then
         if info["message"] then
             if #info["message"] > 5 then
-                TriggerServerEvent("919-admin:server:MessageAll", info["message"])
+                TriggerServerEvent("mri_Qadmin:server:MessageAll", info["message"])
             else
-                TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.msgShort"))
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.msgShort"))
             end
         else
-            TriggerEvent("919-admin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.noMessage"))
+            TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.noMessage"))
         end
     elseif info["action"] == "removejob" then
-        TriggerServerEvent("919-admin:server:FireJob", currentPlayer)
+        TriggerServerEvent("mri_Qadmin:server:FireJob", currentPlayer)
     elseif info["action"] == "removegang" then
-        TriggerServerEvent("919-admin:server:FireGang", currentPlayer)
+        TriggerServerEvent("mri_Qadmin:server:FireGang", currentPlayer)
     elseif info["action"] == "savecar" then
-        TriggerServerEvent("919-admin:server:AddVehicleToGarage", currentPlayer)
+        TriggerServerEvent("mri_Qadmin:server:AddVehicleToGarage", currentPlayer)
     elseif info["action"] == "massdv" then
-        TriggerServerEvent("919-admin:server:DeleteAllEntities", 1) -- Vehicles
+        TriggerServerEvent("mri_Qadmin:server:DeleteAllEntities", 1) -- Vehicles
     elseif info["action"] == "massdp" then
-        TriggerServerEvent("919-admin:server:DeleteAllEntities", 2) -- Peds
+        TriggerServerEvent("mri_Qadmin:server:DeleteAllEntities", 2) -- Peds
     elseif info["action"] == "massdo" then
-        TriggerServerEvent("919-admin:server:DeleteAllEntities", 3) -- Objects
+        TriggerServerEvent("mri_Qadmin:server:DeleteAllEntities", 3) -- Objects
     elseif info["action"] == "clearreports" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             if hasPermission then
-                TriggerServerEvent("919-admin:server:ClearJSON", "reports")
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.cleared").."</strong> "..Lang:t("alerts.reports"))
+                TriggerServerEvent("mri_Qadmin:server:ClearJSON", "reports")
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.cleared").."</strong> "..Lang:t("alerts.reports"))
             end
         end, "clearreports")
     elseif info["action"] == "clearadminchat" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             if hasPermission then
-                TriggerServerEvent("919-admin:server:ClearJSON", "admin")
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.cleared").."</strong> "..Lang:t("alerts.adminchat"))
+                TriggerServerEvent("mri_Qadmin:server:ClearJSON", "admin")
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.cleared").."</strong> "..Lang:t("alerts.adminchat"))
             end
         end, "clearadminchat")
     elseif info["action"] == "clearlogs" then
-        Compat.TriggerCallback("919-admin:server:HasPermission", function(hasPermission)
+        Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             if hasPermission then
-                TriggerServerEvent("919-admin:server:ClearJSON", "logs")
-                TriggerEvent("919-admin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.cleared").."</strong> "..Lang:t("alerts.logs"))
+                TriggerServerEvent("mri_Qadmin:server:ClearJSON", "logs")
+                TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.cleared").."</strong> "..Lang:t("alerts.logs"))
             end
         end, "clearlogs")
     end
@@ -1368,18 +1368,18 @@ RegisterNUICallback("Action", function(info)
 end)
 
 RegisterNUICallback("FirePlayerFromJob", function(citizenID)
-    TriggerServerEvent("919-admin:server:FireJobByCitizenId", citizenID)
+    TriggerServerEvent("mri_Qadmin:server:FireJobByCitizenId", citizenID)
     DebugTrace("NUICallback: FirePlayerFromJob ["..citizenID.."]")
 end)
 
 RegisterNUICallback("FirePlayerFromGang", function(citizenID)
-    TriggerServerEvent("919-admin:server:FireGangByCitizenId", citizenID)
+    TriggerServerEvent("mri_Qadmin:server:FireGangByCitizenId", citizenID)
     DebugTrace("NUICallback: FirePlayerFromGang ["..citizenID.."]")
 end)
 
 RegisterNUICallback("SetJobGrade", function(data)
     if data["citizenid"] ~= nil and data["grade"] ~= nil then
-        TriggerServerEvent("919-admin:server:SetJobGradeByCitizenId", data["citizenid"], data["grade"])
+        TriggerServerEvent("mri_Qadmin:server:SetJobGradeByCitizenId", data["citizenid"], data["grade"])
         DebugTrace("NUICallback: SetJobGrade [".. data["citizenid"]..", "..data["grade"].."]")
     else
         DebugTrace("NUICallback: SetJobGrade [nil, nil]")
@@ -1388,7 +1388,7 @@ end)
 
 RegisterNUICallback("SetGangGrade", function(data)
     if data["citizenid"] ~= nil and data["grade"] ~= nil then
-        TriggerServerEvent("919-admin:server:SetGangGradeByCitizenId", data["citizenid"], data["grade"])
+        TriggerServerEvent("mri_Qadmin:server:SetGangGradeByCitizenId", data["citizenid"], data["grade"])
         DebugTrace("NUICallback: SetGangGrade [".. data["citizenid"]..", "..data["grade"].."]")
     else
         DebugTrace("NUICallback: SetGangGrade [nil, nil]")
@@ -1397,25 +1397,25 @@ end)
 
 RegisterNUICallback("UnbanPlayer", function(data)
     if data["license"] ~= nil then
-        TriggerServerEvent("919-admin:server:UnbanPlayer", data["license"])
+        TriggerServerEvent("mri_Qadmin:server:UnbanPlayer", data["license"])
     end
 end)
 
 RegisterNUICallback("DeleteReport", function(data)
     if data["id"] ~= nil then
-        TriggerServerEvent("919-admin:server:DeleteReport", data["id"])
+        TriggerServerEvent("mri_Qadmin:server:DeleteReport", data["id"])
     end
 end)
 
 RegisterNUICallback("ClaimReport", function(data)
     if data["id"] ~= nil then
-        TriggerServerEvent("919-admin:server:ClaimReport", data["id"])
+        TriggerServerEvent("mri_Qadmin:server:ClaimReport", data["id"])
     end
 end)
 
 RegisterNUICallback("DeleteCharacter", function(citizenId)
     if citizenId ~= nil then
-        TriggerServerEvent("919-admin:server:DeleteCharacter", citizenId)
+        TriggerServerEvent("mri_Qadmin:server:DeleteCharacter", citizenId)
     end
 end)
 
@@ -1424,30 +1424,30 @@ RegisterNUICallback("SaveSetting", function(data)
         if data["setting"] == "darkmode" then
             if data["value"] == 1 then
                 AdminPanel.Settings.DarkMode = true
-                SetResourceKvpInt("919-admin:setting:darkmode", 1)
+                SetResourceKvpInt("mri_Qadmin:setting:darkmode", 1)
             else
                 AdminPanel.Settings.DarkMode = false
-                SetResourceKvpInt("919-admin:setting:darkmode", 0)
+                SetResourceKvpInt("mri_Qadmin:setting:darkmode", 0)
             end
         elseif data["setting"] == "seethrough" then
             if data["value"] == 1 then
                 AdminPanel.Settings.SeeThrough = true
-                SetResourceKvpInt("919-admin:setting:seethrough", 1)
+                SetResourceKvpInt("mri_Qadmin:setting:seethrough", 1)
             else
                 AdminPanel.Settings.SeeThrough = false
-                SetResourceKvpInt("919-admin:setting:seethrough", 0)
+                SetResourceKvpInt("mri_Qadmin:setting:seethrough", 0)
             end
         elseif data["setting"] == "Notifications" then
             if data["value"] == 1 then
                 AdminPanel.Settings.Notifications = true
-                SetResourceKvpInt("919-admin:setting:notifications", 1)
+                SetResourceKvpInt("mri_Qadmin:setting:notifications", 1)
             else
                 AdminPanel.Settings.Notifications = false
-                SetResourceKvpInt("919-admin:setting:notifications", 0)
+                SetResourceKvpInt("mri_Qadmin:setting:notifications", 0)
             end
         elseif data["setting"] == "theme" then
             AdminPanel.Settings.Notifications = tonumber(data["value"])
-            SetResourceKvpInt("919-admin:setting:theme", tonumber(data["value"]))
+            SetResourceKvpInt("mri_Qadmin:setting:theme", tonumber(data["value"]))
         end
         DebugTrace("NUICallback: SaveSetting [".. data["setting"]..", "..data["value"].."]")
     else
@@ -1456,7 +1456,7 @@ RegisterNUICallback("SaveSetting", function(data)
 end)
 
 RegisterNUICallback("Refresh", function()
-    TriggerServerEvent("919-admin:server:RefreshMenu")
+    TriggerServerEvent("mri_Qadmin:server:RefreshMenu")
 end)
 ---------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------
@@ -1596,10 +1596,10 @@ Citizen.CreateThread(function()
                 AdminPanel.SpectatePlayer(-1, -1, "")
             end
             if IsControlJustReleased(0, 174) then
-                TriggerServerEvent("919-admin:server:requestPrevSpectate")
+                TriggerServerEvent("mri_Qadmin:server:requestPrevSpectate")
             end
             if IsControlJustReleased(0, 175) then
-                TriggerServerEvent("919-admin:server:requestNextSpectate")
+                TriggerServerEvent("mri_Qadmin:server:requestNextSpectate")
             end
         end
     end
@@ -1648,7 +1648,7 @@ Citizen.CreateThread(function()
     while true do
         if AdminPanel.DisplayingBlips then
             local Players = {}
-            Compat.TriggerCallback("919-admin:server:GetPlayerPositions", function(p)
+            Compat.TriggerCallback("mri_Qadmin:server:GetPlayerPositions", function(p)
                 Players = p
                 for k,v in ipairs(AdminPanel.PlayerBlips) do
                     if AdminPanel.PlayerBlipsOnline[k] == nil or AdminPanel.PlayerBlipsOnline[k] == true then
@@ -1698,7 +1698,7 @@ end)
 
 function getPlayerName(id)
     local playerName = nil
-    Compat.TriggerCallback("919-Admin:GetPlayerName", function(name)
+    Compat.TriggerCallback("mri_Qadmin:GetPlayerName", function(name)
         playerName = name
     end, id)
     while playerName == nil do
@@ -1747,3 +1747,9 @@ function toggleNames()
         end
     end)
 end
+
+RegisterNetEvent("mri_Qadmin:client:ExecuteCommand",function(command,args)
+
+    ExecuteCommand(command.." "..args)
+
+end)

@@ -3,35 +3,35 @@ SendBack = {}
 SpectatingPlayer = {}
 Frozen = {}
 
-RegisterServerEvent("919-admin:server:SetPosition", function(playerId, x, y, z)
+RegisterServerEvent("mri_Qadmin:server:SetPosition", function(playerId, x, y, z)
     local src = source
     if AdminPanel.HasPermission(src, "teleport") then
         SetEntityCoords(GetPlayerPed(playerId), x, y, z)
     end
 end)
 
-RegisterServerEvent("919-admin:server:KillPlayer", function(playerId)
+RegisterServerEvent("mri_Qadmin:server:KillPlayer", function(playerId)
     local src = source
     if AdminPanel.HasPermission(src, "kill") then
         TriggerClientEvent("hospital:client:KillPlayer", playerId)
-        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.killed").." " .. GetPlayerName(playerId) .. ".")
+        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.killed").." " .. GetPlayerName(playerId) .. ".")
         TriggerEvent("qb-log:server:CreateLog", "adminactions", "KICK", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** "..Lang:t("alerts.killed").." **" .. GetPlayerName(playerId) .. "** [" .. playerId .. "]", false)
     end
 end)
 
-RegisterServerEvent("919-admin:server:SavePlayer", function(playerId)
+RegisterServerEvent("mri_Qadmin:server:SavePlayer", function(playerId)
     local src = source
     if QBCore then
         if AdminPanel.HasPermission(src, "savedata") then
             local TargetPlayer = QBCore.Functions.GetPlayer(playerId)
             TargetPlayer.Functions.Save()
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.savedToDB", {value = GetPlayerName(playerId)}))
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.savedToDB", {value = GetPlayerName(playerId)}))
             TriggerEvent("qb-log:server:CreateLog", "adminactions", "KICK", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "**" ..Lang:t("alerts.savedToDB", {value = GetPlayerName(playerId)}) .. "** [" .. playerId .. "]", false)
         end
     end
 end)
 
-RegisterServerEvent("919-admin:server:KickPlayer", function(playerId, reason)
+RegisterServerEvent("mri_Qadmin:server:KickPlayer", function(playerId, reason)
     local src = source
     if AdminPanel.HasPermission(src, "kick") then
         TriggerEvent("qb-log:server:CreateLog", "adminactions", "KICK", "red", Lang:t("alerts.kickedPlayer", {value = GetPlayerName(src), value2 = GetPlayerName(playerId), value3 = playerId, value4 = reason}), false)
@@ -39,26 +39,26 @@ RegisterServerEvent("919-admin:server:KickPlayer", function(playerId, reason)
     end
 end)
 
-RegisterServerEvent("919-admin:server:Freeze", function(playerId)
+RegisterServerEvent("mri_Qadmin:server:Freeze", function(playerId)
     local src = source
     if AdminPanel.HasPermission(src, "freeze") then
         if not Frozen[playerId] then
             Frozen[playerId] = true
             FreezeEntityPosition(GetPlayerPed(playerId), true)
             --TriggerClientEvent("QBCore:Notify", src, "Froze "..GetPlayerName(playerId)..".", "success")
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.froze").." " .. GetPlayerName(playerId) .. ".")
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.froze").." " .. GetPlayerName(playerId) .. ".")
             TriggerEvent("qb-log:server:CreateLog", "adminactions", "Frozen", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** "..Lang:t("alerts.froze").." **" .. GetPlayerName(playerId) .. "** [" .. playerId .. "]", false)
         else
             Frozen[playerId] = false
             FreezeEntityPosition(GetPlayerPed(playerId), false)
             --TriggerClientEvent("QBCore:Notify", src, "Unfroze "..GetPlayerName(playerId)..".", "success")
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.unfroze").." " .. GetPlayerName(playerId) .. ".")
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.unfroze").." " .. GetPlayerName(playerId) .. ".")
             TriggerEvent("qb-log:server:CreateLog", "adminactions", "Frozen", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** "..Lang:t("alerts.unfroze").." **" .. GetPlayerName(playerId) .. "** [" .. playerId .. "]", false)
         end
     end
 end)
 
-RegisterServerEvent("919-admin:server:KickAllPlayers", function(reason)
+RegisterServerEvent("mri_Qadmin:server:KickAllPlayers", function(reason)
     local src = source
     if AdminPanel.HasPermission(src, "kickall") then
         for k, v in pairs(GetPlayers()) do
@@ -70,7 +70,7 @@ RegisterServerEvent("919-admin:server:KickAllPlayers", function(reason)
     end
 end)
 
-RegisterNetEvent("919-admin:server:BanPlayer", function(player, time, reason, citizenid)
+RegisterNetEvent("mri_Qadmin:server:BanPlayer", function(player, time, reason, citizenid)
     local src = source
     if AdminPanel.HasPermission(src, "ban") then
         local time = tonumber(time)
@@ -112,7 +112,7 @@ RegisterNetEvent("919-admin:server:BanPlayer", function(player, time, reason, ci
                             banTime,
                             GetPlayerName(src)
                         })
-                        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "Banned " .. result[1].name .. " (OFFLINE) for " .. (time / 60 / 60) .. " hours.")
+                        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "Banned " .. result[1].name .. " (OFFLINE) for " .. (time / 60 / 60) .. " hours.")
                         if Config.AnnounceBan then
                             TriggerClientEvent("chat:addMessage", -1, {
                                 template = "<div class=\"chat-message server\"><strong>{0}</strong> "..Lang:t("alerts.bannedOffBy").." <strong>{1}</strong> "..Lang:t("alerts.for1").." {2} "..lang:t("alerts.bannedOffBy2").." {3}</div>",
@@ -160,7 +160,7 @@ AdminPanel.OnlineBanPlayer = function(source, player, time, timeTable, reason)
         })
     end
 
-    TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "Banned " .. GetPlayerName(player) .. " for " .. (time / 60 / 60) .. " hours.")
+    TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "Banned " .. GetPlayerName(player) .. " for " .. (time / 60 / 60) .. " hours.")
     if Config.AnnounceBan then
         TriggerClientEvent("chat:addMessage", -1, {
             template = "<div class=\"chat-message server\"><strong>{0}</strong> has been banned by <strong>{1}</strong> for {2} hours. Reason: {3}</div>",
@@ -175,7 +175,7 @@ AdminPanel.OnlineBanPlayer = function(source, player, time, timeTable, reason)
     end
 end
 
-RegisterNetEvent("919-admin:server:WarnPlayer", function(player, reason, citizenid)
+RegisterNetEvent("mri_Qadmin:server:WarnPlayer", function(player, reason, citizenid)
     local src = source
     if AdminPanel.HasPermission(src, "warn") then
         if player ~= "OFFLINE" then
@@ -208,7 +208,7 @@ RegisterNetEvent("919-admin:server:WarnPlayer", function(player, reason, citizen
                             reason,
                             GetPlayerName(src)
                         })
-                        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.warnedPlayerOffline", {value = result[1].name}))
+                        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.warnedPlayerOffline", {value = result[1].name}))
                         TriggerEvent("qb-log:server:CreateLog", "warns", "Player Warned", "red", string.format("%s was warned by %s for %s", result[1].name, GetPlayerName(src), reason), false)
                     end
                 else
@@ -236,12 +236,12 @@ AdminPanel.OnlineWarnPlayer = function(source, player, reason)
         reason,
         GetPlayerName(src)
     })
-    TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.warnedPlayerOnline", {value = GetPlayerName(player)}))
+    TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.warnedPlayerOnline", {value = GetPlayerName(player)}))
     TriggerEvent("qb-log:server:CreateLog", "warns", "Player Warned", "red", string.format("%s was warned by %s for %s", GetPlayerName(player), GetPlayerName(src), reason), false)
-    TriggerClientEvent("919-admin:client:WarnPlayer", player, GetPlayerName(src), reason)
+    TriggerClientEvent("mri_Qadmin:client:WarnPlayer", player, GetPlayerName(src), reason)
 end
 
-RegisterNetEvent("919-admin:server:ViewWarnings", function(player, citizenid)
+RegisterNetEvent("mri_Qadmin:server:ViewWarnings", function(player, citizenid)
     local src = source
     local license = nil
     if AdminPanel.HasPermission(src, "checkwarns") then
@@ -251,13 +251,13 @@ RegisterNetEvent("919-admin:server:ViewWarnings", function(player, citizenid)
             else
                 license = ESX.GetIdentifier(player)
             end
-            DebugTrace("[919-admin:server:ViewWarnings] Got license (online): " .. license)
+            DebugTrace("[mri_Qadmin:server:ViewWarnings] Got license (online): " .. license)
         else
             if citizenid ~= nil then
                 local result = MySQL.query.await("SELECT * FROM `" .. Config.DB.CharactersTable .. "` WHERE `citizenid` = ?", {citizenid})
                 if result[1] then
                     license = result[1].license
-                    DebugTrace("[919-admin:server:ViewWarnings] Got license (offline): " .. license)
+                    DebugTrace("[mri_Qadmin:server:ViewWarnings] Got license (offline): " .. license)
                 else
                     DebugTrace("Offline view warnings citizenid had no results. CitizenID: " .. citizenid)
                 end
@@ -268,13 +268,13 @@ RegisterNetEvent("919-admin:server:ViewWarnings", function(player, citizenid)
         if license ~= nil then
             local result = MySQL.query.await("SELECT * FROM `warns` WHERE `license` = ?", {license})
             if #result > 0 then
-                TriggerClientEvent("919-admin:client:ViewWarnings", src, result)
-                DebugTrace("[919-admin:server:ViewWarnings] Sending warnings")
+                TriggerClientEvent("mri_Qadmin:client:ViewWarnings", src, result)
+                DebugTrace("[mri_Qadmin:server:ViewWarnings] Sending warnings")
             else
                 if player ~= "OFFLINE" then
-                    TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.noWarnings").."</strong> "..Lang:t("alerts.noWarningsPlayer"))
+                    TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.noWarnings").."</strong> "..Lang:t("alerts.noWarningsPlayer"))
                 else
-                    TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.noWarnings").."</strong> "..Lang:t("alerts.noWarningsPlayer"))
+                    TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.noWarnings").."</strong> "..Lang:t("alerts.noWarningsPlayer"))
                 end
             end
         else
@@ -283,10 +283,10 @@ RegisterNetEvent("919-admin:server:ViewWarnings", function(player, citizenid)
     end
 end)
 
-RegisterNetEvent("919-admin:server:CuffPlayer", function(target)
+RegisterNetEvent("mri_Qadmin:server:CuffPlayer", function(target)
     local src = source
     if AdminPanel.HasPermission(src, "cuff") then
-        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.cuffed"))
+        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.cuffed"))
         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Revive", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** cuffed/uncuffed **" .. GetPlayerName(target) .. "** [" .. target .. "]", false)
         local targetTrigger = "police:client:GetCuffed"
         if ESX then
@@ -296,23 +296,19 @@ RegisterNetEvent("919-admin:server:CuffPlayer", function(target)
     end
 end)
 
-RegisterServerEvent("919-admin:server:RevivePlayer", function(target)
+RegisterServerEvent("mri_Qadmin:server:RevivePlayer", function(target)
     local src = source
     if AdminPanel.HasPermission(src, "revive") then
-        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.revivePlayer", {value = GetPlayerName(target)}))
+        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.revivePlayer", {value = GetPlayerName(target)}))
         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Revive", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** revived **" .. GetPlayerName(target) .. "** [" .. target .. "]", false)
-        local targetTrigger = "hospital:client:Revive"
-        if ESX then
-            targetTrigger = "esx_ambulancejob:revive"
-        end
-        TriggerClientEvent(targetTrigger, target)
+        TriggerClientEvent("mri_Qadmin:client:ExecuteCommand", src, "revive",target)
     end
 end)
 
-RegisterServerEvent("919-admin:server:ReviveAll", function()
+RegisterServerEvent("mri_Qadmin:server:ReviveAll", function()
     local src = source
     if AdminPanel.HasPermission(src, "reviveall") then
-        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.revivedAll"))
+        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.revivedAll"))
         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Revive", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** revived all players.", false)
         if ESX then
             for k, v in pairs(ESX.GetPlayers()) do
@@ -325,9 +321,9 @@ RegisterServerEvent("919-admin:server:ReviveAll", function()
     end
 end)
 
-RegisterServerEvent("919-admin:server:MessageAll", function(message)
+RegisterServerEvent("mri_Qadmin:server:MessageAll", function(message)
     local src = source
-    if AdminPanel.HasPermission(src, "messageall") then TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentMessageAll"))
+    if AdminPanel.HasPermission(src, "messageall") then TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentMessageAll"))
         TriggerClientEvent("chat:addMessage", -1, {
             color = {255, 50, 50},
             multiline = true,
@@ -336,46 +332,46 @@ RegisterServerEvent("919-admin:server:MessageAll", function(message)
     end
 end)
 
-RegisterServerEvent("919-admin:server:DeleteAllEntities", function(entityType)
+RegisterServerEvent("mri_Qadmin:server:DeleteAllEntities", function(entityType)
     local src = source
     local entityTypeString = "VEHICLES"
     if AdminPanel.HasPermission(src, "massdeleteentities") then
         if entityType == 2 then entityTypeString = "PEDS" elseif entityType == 3 then entityTypeString = "OBJECTS" end
-        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.DeletedAllEntities", {value = entityTypeString}))
-        TriggerClientEvent("919-admin:client:DeleteAllEntities", -1, entityType)
+        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.DeletedAllEntities", {value = entityTypeString}))
+        TriggerClientEvent("mri_Qadmin:client:DeleteAllEntities", -1, entityType)
     end
 end)
 
-RegisterServerEvent("919-admin:server:SetWeather", function(weatherType)
+RegisterServerEvent("mri_Qadmin:server:SetWeather", function(weatherType)
     local src = source
     if AdminPanel.HasPermission(src, "weather") then
         if QBCore then
             exports["qb-weathersync"]:setWeather(weatherType)
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.setWeather", {value = weatherType}))
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.setWeather", {value = weatherType}))
         elseif ESX then
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "error", "<strong>"..Lang:t("alerts.error").."</strong> This feature is currently unavailable!")
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "error", "<strong>"..Lang:t("alerts.error").."</strong> This feature is currently unavailable!")
         end
     end
 end)
 
-RegisterServerEvent("919-admin:server:SetTime", function(hour, minute)
+RegisterServerEvent("mri_Qadmin:server:SetTime", function(hour, minute)
     local src = source
     if AdminPanel.HasPermission(src, "time") then
         if QBCore then
             exports["qb-weathersync"]:setTime(tonumber(hour), 0)
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.setTime", {value = hour}))
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.setTime", {value = hour}))
         elseif ESX then
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "error", "<strong>"..Lang:t("alerts.error").."</strong> This feature is currently unavailable!")
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "error", "<strong>"..Lang:t("alerts.error").."</strong> This feature is currently unavailable!")
         end
     end
 end)
 
-RegisterServerEvent("919-admin:server:FeedPlayer", function(target)
+RegisterServerEvent("mri_Qadmin:server:FeedPlayer", function(target)
     local src = source
     if AdminPanel.HasPermission(src, "foodandwater") then
-        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.setMaxValues"))
-        TriggerEvent("919-admin:server:SetMetaDataForPlayer", target, "thirst", 100)
-        TriggerEvent("919-admin:server:SetMetaDataForPlayer", target, "hunger", 100)
+        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.setMaxValues"))
+        TriggerEvent("mri_Qadmin:server:SetMetaDataForPlayer", target, "thirst", 100)
+        TriggerEvent("mri_Qadmin:server:SetMetaDataForPlayer", target, "hunger", 100)
         if QBCore then
             TriggerClientEvent("hud:client:UpdateNeeds", target, 100, 100)
         elseif ESX then
@@ -386,19 +382,19 @@ RegisterServerEvent("919-admin:server:FeedPlayer", function(target)
     end
 end)
 
-RegisterServerEvent("919-admin:server:RelieveStress", function(target)
+RegisterServerEvent("mri_Qadmin:server:RelieveStress", function(target)
     local src = source
     if AdminPanel.HasPermission(src, "relievestress") then
         if QBCore then
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.stressRelieved"))
-            TriggerEvent("919-admin:server:SetMetaDataForPlayer", target, "stress", 0)
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.stressRelieved"))
+            TriggerEvent("mri_Qadmin:server:SetMetaDataForPlayer", target, "stress", 0)
             TriggerClientEvent("hud:client:UpdateStress", target, 0)
             TriggerEvent("qb-log:server:CreateLog", "adminactions", "Relieve Stress", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** relieved stress of **" .. GetPlayerName(target) .. "** [" .. target .. "]", false)
         end
     end
 end)
 
-RegisterServerEvent("919-admin:server:SetMetaDataForPlayer", function(PlayerId, Meta, Data)
+RegisterServerEvent("mri_Qadmin:server:SetMetaDataForPlayer", function(PlayerId, Meta, Data)
     if Meta == "hunger" or Meta == "thirst" then
         if Data >= 100 then
             Data = 100
@@ -414,24 +410,24 @@ RegisterServerEvent("919-admin:server:SetMetaDataForPlayer", function(PlayerId, 
     end
 end)
 
-RegisterNetEvent("919-admin:server:SetPedModel", function(player, model)
+RegisterNetEvent("mri_Qadmin:server:SetPedModel", function(player, model)
     local src = source
     if AdminPanel.HasPermission(src, "setpedmodel") then
-        TriggerClientEvent("919-admin:client:SetPedModel", player, model)
+        TriggerClientEvent("mri_Qadmin:client:SetPedModel", player, model)
     end
 end)
 
-RegisterNetEvent("919-admin:server:RequestSpectate", function(player)
+RegisterNetEvent("mri_Qadmin:server:RequestSpectate", function(player)
     local src = source
     if AdminPanel.HasPermission(src, "spectate") then
         local coords = GetEntityCoords(GetPlayerPed(player))
         SpectatingPlayer[src] = player
-        TriggerClientEvent("919-admin:client:RequestSpectate", src, player, coords, GetPlayerName(player))
+        TriggerClientEvent("mri_Qadmin:client:RequestSpectate", src, player, coords, GetPlayerName(player))
         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Spectate", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** started spectating **" .. GetPlayerName(player) .. "** [" .. player .. "]", false)
     end
 end)
 
-RegisterNetEvent("919-admin:server:requestNextSpectate", function()
+RegisterNetEvent("mri_Qadmin:server:requestNextSpectate", function()
     local src = source
     if AdminPanel.HasPermission(src, "spectate") and SpectatingPlayer[src] then
         local foundPlayer = false
@@ -444,7 +440,7 @@ RegisterNetEvent("919-admin:server:requestNextSpectate", function()
                 if i == src then
                 else
                     local coords = GetEntityCoords(GetPlayerPed(i))
-                    TriggerClientEvent("919-admin:client:RequestSpectate", src, i, coords, GetPlayerName(i))
+                    TriggerClientEvent("mri_Qadmin:client:RequestSpectate", src, i, coords, GetPlayerName(i))
                     TriggerEvent("qb-log:server:CreateLog", "adminactions", "Spectate", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** started spectating **" .. GetPlayerName(i) .. "** [" .. i .. "]", false)
                     SpectatingPlayer[src] = i
                     foundPlayer = true
@@ -471,7 +467,7 @@ RegisterNetEvent("919-admin:server:requestNextSpectate", function()
     end
 end)
 
-RegisterNetEvent("919-admin:server:requestPrevSpectate", function()
+RegisterNetEvent("mri_Qadmin:server:requestPrevSpectate", function()
     local src = source
     if AdminPanel.HasPermission(src, "spectate") and SpectatingPlayer[src] then
         local foundPlayer = false
@@ -482,7 +478,7 @@ RegisterNetEvent("919-admin:server:requestPrevSpectate", function()
             Player = Compat.GetPlayer(i)
             if (Player ~= nil) and i ~= src then
                 local coords = GetEntityCoords(GetPlayerPed(i))
-                TriggerClientEvent("919-admin:client:RequestSpectate", src, i, coords, GetPlayerName(i))
+                TriggerClientEvent("mri_Qadmin:client:RequestSpectate", src, i, coords, GetPlayerName(i))
                 TriggerEvent("qb-log:server:CreateLog", "adminactions", "Spectate", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** started spectating **" .. GetPlayerName(i) .. "** [" .. i .. "]", false)
                 SpectatingPlayer[src] = i
                 foundPlayer = true
@@ -508,10 +504,10 @@ RegisterNetEvent("919-admin:server:requestPrevSpectate", function()
     end
 end)
 
-RegisterNetEvent("919-admin:server:ScreenshotSubmit", function(playerId)
+RegisterNetEvent("mri_Qadmin:server:ScreenshotSubmit", function(playerId)
     local src = source
     if AdminPanel.HasPermission(src, "screenshot") then
-        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.screenshotting"))
+        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.screenshotting"))
         local screenshotOptions = {
             encoding = "png",
             quality = 1
@@ -551,7 +547,7 @@ RegisterNetEvent("919-admin:server:ScreenshotSubmit", function(playerId)
     end
 end)
 
-RegisterNetEvent("919-admin:server:SaveCar", function(mods, vehicle, hash, plate, senderId)
+RegisterNetEvent("mri_Qadmin:server:SaveCar", function(mods, vehicle, hash, plate, senderId)
     local src = source
     local Player = Compat.GetPlayer(src)
     local result = MySQL.query.await("SELECT plate FROM `"..Config.DB.VehiclesTable.."` WHERE plate = ?", {plate})
@@ -572,11 +568,11 @@ RegisterNetEvent("919-admin:server:SaveCar", function(mods, vehicle, hash, plate
         end
         if senderId then
             TriggerEvent("qb-log:server:CreateLog", "adminactions", "Admin Car", "red", "**STAFF MEMBER " .. GetPlayerName(senderId) .. "** has added a " .. vehicle.model .. " (" .. plate .. ") to the garage of " .. GetPlayerName(src), false)
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", senderId, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.addedVehicle", {value = vehicle.model}))
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", senderId, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.addedVehicle", {value = vehicle.model}))
         end
     else
         if senderId then
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", senderId, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.playerOwnsAlready"))
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", senderId, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.playerOwnsAlready"))
         end
         if QBCore then
             TriggerClientEvent("QBCore:Notify", src, Lang:t("notify.vehicleAlreadyYours"), "error", 3000)
@@ -586,14 +582,14 @@ RegisterNetEvent("919-admin:server:SaveCar", function(mods, vehicle, hash, plate
     end
 end)
 
-RegisterServerEvent("919-admin:server:RequestVehicleSpawn", function(modelName)
+RegisterServerEvent("mri_Qadmin:server:RequestVehicleSpawn", function(modelName)
     local src = source
     if AdminPanel.HasPermission(src, "spawncar") then
-       qbx.spawnVehicle(modelName)
+       TriggerClientEvent("mri_Qadmin:client:ExecuteCommand",src,"car",modelName)
     end
 end)
 
-RegisterServerEvent("919-admin:server:DeleteCharacter", function(citizenId)
+RegisterServerEvent("mri_Qadmin:server:DeleteCharacter", function(citizenId)
     local src = source
     if AdminPanel.HasPermission(src, "deletecharacter") then
         MySQL.query("SELECT * FROM  `" .. Config.DB.CharactersTable .. "` WHERE citizenid = ? LIMIT 1", {citizenId}, function(result)
@@ -601,33 +597,33 @@ RegisterServerEvent("919-admin:server:DeleteCharacter", function(citizenId)
                 MySQL.query("DELETE FROM `" .. Config.DB.CharactersTable .. "` WHERE citizenid = ? LIMIT 1", {citizenId}, function(rowsAffected)
                     if rowsAffected then
                         local charInfo = json.decode(result[1].charinfo) or {firstname = result[1].firstname, lastname = result[1].lastname}
-                        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.deletedCharacter"))
+                        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.deletedCharacter"))
                         TriggerEvent("qb-log:server:CreateLog", "bans", "Player Unbanned", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** deleted " .. result[1].name .."'s character ".. charInfo.firstname .. " " .. charInfo.lastname, false)
                     else
-                        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.noRowsDeleted"))
+                        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.noRowsDeleted"))
                     end
                     local results = MySQL.query.await("SELECT * FROM `"..Config.DB.CharactersTable.."`")
-                    TriggerClientEvent("919-admin:client:ReceiveCharacters", src, results)
+                    TriggerClientEvent("mri_Qadmin:client:ReceiveCharacters", src, results)
                 end)
             else
-                TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.cantFindLicense"))
+                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.cantFindLicense"))
             end
         end)
     end
 end)
 
 
-RegisterServerEvent("919-admin:server:UnbanPlayer", function(license)
+RegisterServerEvent("mri_Qadmin:server:UnbanPlayer", function(license)
     local src = source
     if AdminPanel.HasPermission(src, "unban") then
         MySQL.query("SELECT * FROM `bans` WHERE license = ? LIMIT 1", {license}, function(result)
             if result[1] then
                 MySQL.query("DELETE FROM `bans` WHERE license = ? LIMIT 1", {license}, function(rowsAffected)
                     if rowsAffected then
-                        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.unbanned"))
+                        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.unbanned"))
                         TriggerEvent("qb-log:server:CreateLog", "bans", "Player Unbanned", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** unbanned " .. result[1].name, false)
                     else
-                        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.noRowsDeleted"))
+                        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.noRowsDeleted"))
                     end
                     local results = MySQL.query.await("SELECT * FROM `bans`")
                     local BansInfo = {}
@@ -643,35 +639,35 @@ RegisterServerEvent("919-admin:server:UnbanPlayer", function(license)
                             BannedBy = v1.bannedby
                         })
                     end
-                    TriggerClientEvent("919-admin:client:ReceiveBansInfo", src, BansInfo)
+                    TriggerClientEvent("mri_Qadmin:client:ReceiveBansInfo", src, BansInfo)
                 end)
             else
-                TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.cantFindLicense"))
+                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.cantFindLicense"))
             end
         end)
     end
 end)
 
 
-RegisterServerEvent("919-admin:server:ClearInventory", function(targetId)
+RegisterServerEvent("mri_Qadmin:server:ClearInventory", function(targetId)
     local src = source
     if AdminPanel.HasPermission(src, "clearinventory") then
         Compat.ClearPlayerInventory(targetId)
         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Inventory Cleared", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** has cleared the inventory of " .. GetPlayerName(targetId), false)
-        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.clearedInventory"))
+        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.clearedInventory"))
     end
 end)
 
-RegisterServerEvent("919-admin:server:SetJob", function(targetId, job, grade)
+RegisterServerEvent("mri_Qadmin:server:SetJob", function(targetId, job, grade)
     local src = source
     if AdminPanel.HasPermission(src, "setjob") then
         Compat.SetPlayerJob(targetId, job, grade)
         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Job", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** set the job of " .. GetPlayerName(targetId) .. " to " .. job .. " (" .. grade .. ")", false)
-        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.jobSet", {value = job, value2 = grade}))
+        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.jobSet", {value = job, value2 = grade}))
     end
 end)
 
-RegisterServerEvent("919-admin:server:SetGang", function(targetId, gang, grade)
+RegisterServerEvent("mri_Qadmin:server:SetGang", function(targetId, gang, grade)
     local src = source
     if AdminPanel.HasPermission(src, "setgang") then
         if QBCore then
@@ -682,19 +678,19 @@ RegisterServerEvent("919-admin:server:SetGang", function(targetId, gang, grade)
                         targetPlayer.Functions.SetGang(gang, grade)
                         targetPlayer.Functions.Save()
                         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Gang", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** set the gang of " .. GetPlayerName(targetId) .. " to " .. gang .. " (" .. grade .. ")", false)
-                        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.jobSet", {value = gang, value2 = grade}))
+                        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.jobSet", {value = gang, value2 = grade}))
                     end
                 else
-                    TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.invalidgangGrade"))
+                    TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.invalidgangGrade"))
                 end
             else
-                TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.invalidgang"))
+                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.invalidgang"))
             end
         end
     end
 end)
 
-RegisterServerEvent("919-admin:server:GiveItem", function(targetId, item, amount)
+RegisterServerEvent("mri_Qadmin:server:GiveItem", function(targetId, item, amount)
     local src = source
     if AdminPanel.HasPermission(src, "giveitem") then
         if QBCore then
@@ -708,11 +704,11 @@ RegisterServerEvent("919-admin:server:GiveItem", function(targetId, item, amount
                 if targetPlayer then
                     targetPlayer.Functions.AddItem(item, amount)
                     TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Gang", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** gave " .. item .. " (x" .. amount .. ") to " .. GetPlayerName(targetId), false)
-                    TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.gaveItem", {value = item}))
+                    TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.gaveItem", {value = item}))
                     TriggerClientEvent("QBCore:Notify", targetId, Lang:t("notify.givenItem", {value = item}), "success")
                 end
             else
-                TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.invalidItem"))
+                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.invalidItem"))
             end
         elseif ESX then
             if targetId == nil then
@@ -730,32 +726,32 @@ RegisterServerEvent("919-admin:server:GiveItem", function(targetId, item, amount
             if targetPlayer then
                 targetPlayer.addInventoryItem(item, amount)
                 TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Gang", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** gave " .. item .. " (x" .. amount .. ") to " .. GetPlayerName(targetId), false)
-                TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.gaveItem", {value = item}))
+                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.gaveItem", {value = item}))
                 TriggerClientEvent("QBCore:Notify", targetId, Lang:t("notify.givenItem", {value = item}), "success")
             end
         end
     end
 end)
 
-RegisterServerEvent("919-admin:server:FireJob", function(targetId)
+RegisterServerEvent("mri_Qadmin:server:FireJob", function(targetId)
     local src = source
     if AdminPanel.HasPermission(src, "firejob") then
         Compat.SetPlayerJob(targetId, "unemployed", 0)
         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Job", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** fired " .. GetPlayerName(targetId) .. " from their job.", false)
-        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.firedJob"))
+        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.firedJob"))
     end
 end)
 
-RegisterServerEvent("919-admin:server:FireGang", function(targetId)
+RegisterServerEvent("mri_Qadmin:server:FireGang", function(targetId)
     local src = source
     if AdminPanel.HasPermission(src, "firegang") then
         Compat.SetPlayerGang(targetId, "none", 0)
         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Gang", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** removed " .. GetPlayerName(targetId) .. " from their gang.", false)
-        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.firedGang"))
+        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.firedGang"))
     end
 end)
 
-RegisterServerEvent("919-admin:server:FireJobByCitizenId", function(citizenId)
+RegisterServerEvent("mri_Qadmin:server:FireJobByCitizenId", function(citizenId)
     local src = source
     if AdminPanel.HasPermission(src, "firejob") then
         local targetPlayer = Compat.GetPlayerFromCharacterIdentifier(citizenId)
@@ -767,7 +763,7 @@ RegisterServerEvent("919-admin:server:FireJobByCitizenId", function(citizenId)
                 targetPlayer.setJob("unemployed", 0)
             end
             TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Job", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** removed " .. GetPlayerName(targetPlayer.PlayerData.source) .. " from their job.", false)
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.firedJob"))
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.firedJob"))
         else -- Player is offline, so we"re going to formulate the default JSON for unemployed and set it to the offline character
             if QBCore then
                 PlayerData = {}
@@ -786,14 +782,14 @@ RegisterServerEvent("919-admin:server:FireJobByCitizenId", function(citizenId)
                 MySQL.update("UPDATE `" .. Config.DB.CharactersTable .. "` SET `job` = ? WHERE `citizenid` = ?", {json.encode(PlayerData.job), citizenId}, function(rowsAffected)
                     if rowsAffected ~= 0 and rowsAffected ~= nil then
                         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Job", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** removed (OFFLINE) Citizen ID " .. citizenId .. " from their job.", false)
-                        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.firedJob"))
+                        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.firedJob"))
                     end
                 end)
             elseif ESX then
                 MySQL.update("UPDATE `" .. Config.DB.CharactersTable .. "` SET `job` = ? WHERE `identifier` = ?", {"unemployed", citizenId}, function(rowsAffected)
                     if rowsAffected ~= 0 and rowsAffected ~= nil then
                         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Job", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** removed (OFFLINE) Citizen ID " .. citizenId .. " from their job.", false)
-                        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.firedJob"))
+                        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.firedJob"))
                     end
                 end)
             end
@@ -801,7 +797,7 @@ RegisterServerEvent("919-admin:server:FireJobByCitizenId", function(citizenId)
     end
 end)
 
-RegisterServerEvent("919-admin:server:FireGangByCitizenId", function(citizenId)
+RegisterServerEvent("mri_Qadmin:server:FireGangByCitizenId", function(citizenId)
     local src = source
     if AdminPanel.HasPermission(src, "firegang") then
         if QBCore then
@@ -810,7 +806,7 @@ RegisterServerEvent("919-admin:server:FireGangByCitizenId", function(citizenId)
                 targetPlayer.Functions.SetGang("none", 0)
                 targetPlayer.Functions.Save()
                 TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Job Grade", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** removed " .. GetPlayerName(targetPlayer.PlayerData.source) .. " from their gang.", false)
-                TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.firedGang"))
+                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.firedGang"))
             else -- Player is offline, so we"re going to formulate the default JSON for unemployed and set it to the offline character
                 PlayerData = {}
                 PlayerData.gang = {}
@@ -823,7 +819,7 @@ RegisterServerEvent("919-admin:server:FireGangByCitizenId", function(citizenId)
                 MySQL.update("UPDATE `" .. Config.DB.CharactersTable .. "` SET `gang` = ? WHERE `citizenid` = ?", {json.encode(PlayerData.gang), citizenId}, function(rowsAffected)
                     if rowsAffected ~= 0 and rowsAffected ~= nil then
                         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Gang", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** removed (OFFLINE) Citizen ID " .. citizenId .. " from their gang.", false)
-                        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.firedGang"))
+                        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.firedGang"))
                     end
                 end)
             end
@@ -831,7 +827,7 @@ RegisterServerEvent("919-admin:server:FireGangByCitizenId", function(citizenId)
     end
 end)
 
-RegisterServerEvent("919-admin:server:SetGangGradeByCitizenId", function(citizenId, grade)
+RegisterServerEvent("mri_Qadmin:server:SetGangGradeByCitizenId", function(citizenId, grade)
     local src = source
     if AdminPanel.HasPermission(src, "setgang") then
         if QBCore then
@@ -841,9 +837,9 @@ RegisterServerEvent("919-admin:server:SetGangGradeByCitizenId", function(citizen
                     targetPlayer.Functions.SetGang(targetPlayer.PlayerData.gang.name, grade)
                     targetPlayer.Functions.Save()
                     TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Gang Grade", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** set gang grade of " .. GetPlayerName(targetPlayer.PlayerData.source) .. " to " .. grade .. ".", false)
-                    TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> Set gang grade of " .. AdminPanel.CharacterName(targetPlayer) .. " (" .. GetPlayerName(targetId) .. ") to " .. grade)
+                    TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> Set gang grade of " .. AdminPanel.CharacterName(targetPlayer) .. " (" .. GetPlayerName(targetId) .. ") to " .. grade)
                 else
-                    TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.invalidgangGrade"))
+                    TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.invalidgangGrade"))
                 end
             else
                 local result = MySQL.query.await("SELECT `gang` FROM "..Config.DB.CharactersTable.." WHERE citizenid = ?", {citizenId})
@@ -857,26 +853,26 @@ RegisterServerEvent("919-admin:server:SetGangGradeByCitizenId", function(citizen
                             MySQL.update("UPDATE `" .. Config.DB.CharactersTable .. "` SET `gang` = ? WHERE `citizenid` = ?", {json.encode(gangInfo), citizenId}, function(rowsAffected)
                                 if rowsAffected ~= 0 and rowsAffected ~= nil then
                                     TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Gang", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** set citizen id " .. citizenId .. " to gang grade " .. grade .. " (OFFLINE)", false)
-                                    TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.gangGradeSet", {value = grade}))
+                                    TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.gangGradeSet", {value = grade}))
                                 else
-                                    TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.databaseError"))
+                                    TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.databaseError"))
                                 end
                             end)
                         else
-                            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.invalidgangGrade"))
+                            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.invalidgangGrade"))
                         end
                     else
-                        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.databaseError2"))
+                        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.databaseError2"))
                     end
                 else
-                    TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.databaseError3"))
+                    TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.databaseError3"))
                 end
             end
         end
     end
 end)
 
-RegisterServerEvent("919-admin:server:SetJobGradeByCitizenId", function(citizenId, grade)
+RegisterServerEvent("mri_Qadmin:server:SetJobGradeByCitizenId", function(citizenId, grade)
     local src = source
     if AdminPanel.HasPermission(src, "setjob") then
         local targetPlayer = Compat.GetPlayerFromCharacterIdentifier(citizenId)
@@ -886,14 +882,14 @@ RegisterServerEvent("919-admin:server:SetJobGradeByCitizenId", function(citizenI
                     targetPlayer.Functions.SetJob(targetPlayer.PlayerData.job.name, grade)
                     targetPlayer.Functions.Save()
                     TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Job", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** set job grade of " .. GetPlayerName(targetPlayer.PlayerData.source) .. " to " .. grade .. ".", false)
-                    TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> Set job grade of " .. AdminPanel.CharacterName(targetPlayer) .. " (" .. GetPlayerName(targetId) .. ") to " .. grade)
+                    TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> Set job grade of " .. AdminPanel.CharacterName(targetPlayer) .. " (" .. GetPlayerName(targetId) .. ") to " .. grade)
                 else
-                    TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> Invalid job grade.")
+                    TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> Invalid job grade.")
                 end
             elseif ESX then
                 targetPlayer.setJob(targetPlayer.getJob().name, grade)
                 TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Job", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** set job grade of " .. GetPlayerName(targetPlayer.PlayerData.source) .. " to " .. grade .. ".", false)
-                TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> Set job grade of " .. AdminPanel.CharacterName(targetPlayer) .. " (" .. GetPlayerName(targetId) .. ") to " .. grade)
+                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> Set job grade of " .. AdminPanel.CharacterName(targetPlayer) .. " (" .. GetPlayerName(targetId) .. ") to " .. grade)
             end
         else
             local result = nil
@@ -914,89 +910,89 @@ RegisterServerEvent("919-admin:server:SetJobGradeByCitizenId", function(citizenI
                         MySQL.update("UPDATE `" .. Config.DB.CharactersTable .. "` SET `job` = ? WHERE `citizenid` = ?", {json.encode(jobInfo), citizenId}, function(rowsAffected)
                             if rowsAffected ~= 0 and rowsAffected ~= nil then
                                 TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Gang", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** set citizen id " .. citizenId .. " to job grade " .. grade .. " (OFFLINE)", false)
-                                TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.jobGradeSet", {value = grade}))
+                                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.jobGradeSet", {value = grade}))
                             else
-                                TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.databaseError"))
+                                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.databaseError"))
                             end
                         end)
                     else
-                        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.invalidJobGrade"))
+                        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.invalidJobGrade"))
                     end
                 elseif ESX then
                     MySQL.update("UPDATE `" .. Config.DB.CharactersTable .. "` SET `job_grade` = ? WHERE `identifier` = ?", {jobInfo.grade.level, citizenId}, function(rowsAffected)
                         if rowsAffected ~= 0 and rowsAffected ~= nil then
                             TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Gang", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** set citizen id " .. citizenId .. " to job grade " .. grade .. " (OFFLINE)", false)
-                            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.jobGradeSet", {value = grade}))
+                            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.jobGradeSet", {value = grade}))
                         else
-                            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.databaseError"))
+                            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.databaseError"))
                         end
                     end)
                 end
             else
-                TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.databaseError3"))
+                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.databaseError3"))
             end
         end
     end
 end)
 
-RegisterServerEvent("919-admin:server:AddVehicleToGarage", function(targetId)
+RegisterServerEvent("mri_Qadmin:server:AddVehicleToGarage", function(targetId)
     local src = source
     if AdminPanel.HasPermission(src, "savecar") then
-        TriggerClientEvent("919-admin:client:SaveCar", targetId, src)
+        TriggerClientEvent("mri_Qadmin:client:SaveCar", targetId, src)
     end
 end)
 
-RegisterServerEvent("919-admin:server:BringPlayer", function(targetId)
+RegisterServerEvent("mri_Qadmin:server:BringPlayer", function(targetId)
     local src = source
     if AdminPanel.HasPermission(src, "teleport") then
         SendPlayerBack[targetId] = GetEntityCoords(GetPlayerPed(targetId))
         local coords = GetEntityCoords(GetPlayerPed(src))
         SetEntityCoords(GetPlayerPed(targetId), coords)
-        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.teleportToYou", {value = GetPlayerName(targetId)}))
+        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.teleportToYou", {value = GetPlayerName(targetId)}))
         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Teleport", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** brought **" .. GetPlayerName(targetId) .. "** [" .. targetId .. "] to them", false)
     end
 end)
 
-RegisterServerEvent("919-admin:server:SendPlayerBack", function(targetId)
+RegisterServerEvent("mri_Qadmin:server:SendPlayerBack", function(targetId)
     local src = source
     if AdminPanel.HasPermission(src, "teleport") then
         if SendPlayerBack[targetId] then
             SetEntityCoords(GetPlayerPed(targetId), SendPlayerBack[targetId])
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.teleportedBack", {value = GetPlayerName(targetId)}))
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.teleportedBack", {value = GetPlayerName(targetId)}))
             SendPlayerBack[targetId] = nil
         else
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.noPosition"))
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.noPosition"))
         end
     end
 end)
 
-RegisterServerEvent("919-admin:server:SendBackSelf", function()
+RegisterServerEvent("mri_Qadmin:server:SendBackSelf", function()
     local src = source
     if AdminPanel.HasPermission(src, "teleport") then
         if SendBack[src] then
             SetEntityCoords(GetPlayerPed(src), SendBack[src])
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentSelfBack"))
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.sentSelfBack"))
             SendBack[src] = nil
         else
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.noPosition"))
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.noPosition"))
         end
     end
 end)
 
 
-RegisterServerEvent("919-admin:server:GotoPlayer", function(targetId)
+RegisterServerEvent("mri_Qadmin:server:GotoPlayer", function(targetId)
     local src = source
     if AdminPanel.HasPermission(src, "teleport") then
         SendBack[src] = GetEntityCoords(GetPlayerPed(src))
         local coords = GetEntityCoords(GetPlayerPed(targetId))
         SetEntityCoords(GetPlayerPed(src), coords.x, coords.y, coords.z)
-        TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> " ..Lang:t("alerts.teleportedTo", {value = GetPlayerName(targetId)}))
+        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> " ..Lang:t("alerts.teleportedTo", {value = GetPlayerName(targetId)}))
         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Teleport", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** teleported to **" .. GetPlayerName(targetId) .. "** [" .. targetId .. "]", false)
     end
 end)
 
 if QBCore then
-    QBCore.Functions.CreateCallback("919-admin:server:HasPermissions", function(source, cb, group)
+    QBCore.Functions.CreateCallback("mri_Qadmin:server:HasPermissions", function(source, cb, group)
         local src = source
         local retval = false
         if QBCore.Functions.HasPermission(src, group) then
@@ -1005,7 +1001,7 @@ if QBCore then
         cb(retval)
     end)
 
-    QBCore.Functions.CreateCallback("919-admin:server:GetPlayerPositions", function(source, cb)
+    QBCore.Functions.CreateCallback("mri_Qadmin:server:GetPlayerPositions", function(source, cb)
         local PlayerPositions = {}
         for k, v in pairs(GetPlayers()) do
             v = tonumber(v)
@@ -1014,7 +1010,7 @@ if QBCore then
         cb(PlayerPositions)
     end)
 elseif ESX then
-    ESX.RegisterServerCallback("919-admin:server:HasPermissions", function(source, cb, group)
+    ESX.RegisterServerCallback("mri_Qadmin:server:HasPermissions", function(source, cb, group)
         local src = source
         local retval = false
         local Player = ESX.GetPlayerFromId(source)
@@ -1024,7 +1020,7 @@ elseif ESX then
         cb(retval)
     end)
 
-    ESX.RegisterServerCallback("919-admin:server:GetPlayerPositions", function(source, cb)
+    ESX.RegisterServerCallback("mri_Qadmin:server:GetPlayerPositions", function(source, cb)
         local PlayerPositions = {}
         local Trigger = nil
         for k, v in pairs(ESX.GetPlayers()) do
@@ -1040,7 +1036,7 @@ elseif ESX then
     end)
 end
 
-RegisterServerEvent("919-admin:server:SetPermissions", function(targetId, group)
+RegisterServerEvent("mri_Qadmin:server:SetPermissions", function(targetId, group)
     if QBCore then
         QBCore.Functions.AddPermission(targetId, group.rank)
     elseif ESX then
@@ -1050,14 +1046,14 @@ RegisterServerEvent("919-admin:server:SetPermissions", function(targetId, group)
     TriggerClientEvent("QBCore:Notify", targetId, Lang:t("alerts.permissionsSet", {value = group.label}))
 end)
 
-RegisterServerEvent("919-admin:server:OpenSkinMenu", function(targetId)
+RegisterServerEvent("mri_Qadmin:server:OpenSkinMenu", function(targetId)
     local src = source
     if AdminPanel.HasPermission(src, "skinmenu") then
-        TriggerClientEvent("919-admin:client:ShowPanelAlert", source, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.skinMenuOpened", {value = GetPlayerName(targetId)}))
+        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", source, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.skinMenuOpened", {value = GetPlayerName(targetId)}))
         if QBCore then
             TriggerClientEvent("qb-clothing:client:openMenu", targetId)
         elseif ESX then
-            TriggerClientEvent("919-admin:client:OpenSkinMenu1", targetId)
+            TriggerClientEvent("mri_Qadmin:client:OpenSkinMenu1", targetId)
         end
         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Skin Menu", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** opened skin menu for " .. GetPlayerName(targetId), false)
     end

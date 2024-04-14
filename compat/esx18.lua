@@ -323,7 +323,7 @@ end
 if (not IsDuplicityVersion()) then
     Compat = {
         OpenInventory = function(targetId) 
-            TriggerServerEvent("919-Admin:server:OpenInventory", targetId)
+            TriggerServerEvent("mri_Qadmin:server:OpenInventory", targetId)
         end,
         UncuffSelf = function()
             TriggerEvent('esx_policejob:handcuff')

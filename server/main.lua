@@ -48,7 +48,7 @@ if Config.EnableAdminPanelCommand then
     end, false)
 end
 
-RegisterNetEvent("919-admin:server:ReportReply", function(data)
+RegisterNetEvent("mri_Qadmin:server:ReportReply", function(data)
     local citizenid = nil
     if data.name ~= nil then
         for k, v in ipairs(GetPlayers()) do
@@ -65,7 +65,7 @@ RegisterNetEvent("919-admin:server:ReportReply", function(data)
     end
 end)
 
-RegisterNetEvent("919-admin:server:RequestPanel", function()
+RegisterNetEvent("mri_Qadmin:server:RequestPanel", function()
     local src = source
     if AdminPanel.HasPermission(src, "adminmenu") then
         OpenPanel(src)
@@ -83,16 +83,16 @@ OpenPanel = function(source)
             hasPerms = true
         end
         local role = "Staff"
-        TriggerClientEvent("919-admin:client:OpenMenu", source, json.encode(ServerInformation.PlayerList), ServerInformation, GetConvarInt("sv_maxclients", 32), version, hasPerms, role)
+        TriggerClientEvent("mri_Qadmin:client:OpenMenu", source, json.encode(ServerInformation.PlayerList), ServerInformation, GetConvarInt("sv_maxclients", 32), version, hasPerms, role)
     end)
 end
 
-Compat.CreateCallback("919-Admin:GetPlayerName", function(source, cb, id)
+Compat.CreateCallback("mri_Qadmin:GetPlayerName", function(source, cb, id)
     local test = Compat.GetCharacterData(id)
     cb(test.CharacterName)
 end)
 
-Compat.CreateCallback("919-admin:server:Refresh", function(source, cb)
+Compat.CreateCallback("mri_Qadmin:server:Refresh", function(source, cb)
     if AdminPanel.HasPermission(src, "adminmenu") then
         local playerList = {}
         for k, v in ipairs(GetPlayers()) do
@@ -137,26 +137,26 @@ Compat.CreateCallback("919-admin:server:Refresh", function(source, cb)
     end
 end)
 
-RegisterNetEvent("919-admin:AddPlayer", function()
+RegisterNetEvent("mri_Qadmin:AddPlayer", function()
     local src = source
-    TriggerClientEvent("919-admin:AddPlayer", -1, src, os.time() )
+    TriggerClientEvent("mri_Qadmin:AddPlayer", -1, src, os.time() )
 end)
 
-RegisterNetEvent("919-admin:server:RequestJobPageInfo", function()
+RegisterNetEvent("mri_Qadmin:server:RequestJobPageInfo", function()
     local src = source
     if AdminPanel.HasPermission(src, "jobpage") then
-        TriggerClientEvent("919-admin:client:ReceiveJobPageInfo", src, Compat.GetMasterEmployeeList())
+        TriggerClientEvent("mri_Qadmin:client:ReceiveJobPageInfo", src, Compat.GetMasterEmployeeList())
     end
 end)
 
-RegisterNetEvent("919-admin:server:RequestGangPageInfo", function()
+RegisterNetEvent("mri_Qadmin:server:RequestGangPageInfo", function()
     local src = source
     if AdminPanel.HasPermission(src, "gangpage") then
-        TriggerClientEvent("919-admin:client:ReceiveGangPageInfo", src, Compat.GetMasterGangList())
+        TriggerClientEvent("mri_Qadmin:client:ReceiveGangPageInfo", src, Compat.GetMasterGangList())
     end
 end)
 
-RegisterNetEvent("919-admin:server:RequestBansInfo", function()
+RegisterNetEvent("mri_Qadmin:server:RequestBansInfo", function()
     local src = source
     if AdminPanel.HasPermission(src, "banspage") then
         local results = MySQL.query.await("SELECT * FROM `"..Config.DB.BansTable.."`")
@@ -173,11 +173,11 @@ RegisterNetEvent("919-admin:server:RequestBansInfo", function()
                 BannedBy = v1.bannedby
             })
         end
-        TriggerClientEvent("919-admin:client:ReceiveBansInfo", src, BansInfo)
+        TriggerClientEvent("mri_Qadmin:client:ReceiveBansInfo", src, BansInfo)
     end
 end)
 
-RegisterNetEvent("919-admin:server:ClearJSON", function(type)
+RegisterNetEvent("mri_Qadmin:server:ClearJSON", function(type)
     if type == "admin" then
         AdminPanel.AdminChat = {}
         SaveResourceFile(GetCurrentResourceName(), "json/adminchat.json", json.encode(AdminPanel.AdminChat), -1)
@@ -190,62 +190,62 @@ RegisterNetEvent("919-admin:server:ClearJSON", function(type)
     end
 end)
 
-RegisterNetEvent("919-admin:server:RequestReportsInfo", function()
+RegisterNetEvent("mri_Qadmin:server:RequestReportsInfo", function()
     local src = source
     if AdminPanel.HasPermission(src, "viewreports") then
-        TriggerClientEvent("919-admin:client:ReceiveReportsInfo", src, AdminPanel.Reports)
+        TriggerClientEvent("mri_Qadmin:client:ReceiveReportsInfo", src, AdminPanel.Reports)
     end
 end)
 
-RegisterNetEvent("919-admin:server:RequestAdminChat", function()
+RegisterNetEvent("mri_Qadmin:server:RequestAdminChat", function()
     local src = source
     if AdminPanel.HasPermission(src, "adminchat") then
-        TriggerClientEvent("919-admin:client:ReceiveAdminChat", src, AdminPanel.AdminChat)
+        TriggerClientEvent("mri_Qadmin:client:ReceiveAdminChat", src, AdminPanel.AdminChat)
     end
 end)
 
-RegisterNetEvent("919-admin:server:RequestVehiclesInfo", function()
+RegisterNetEvent("mri_Qadmin:server:RequestVehiclesInfo", function()
     local src = source
     if AdminPanel.HasPermission(src, "vehiclesinfo") then
         local results = Compat.GetVehiclesList()
         if results ~= nil then
-            TriggerClientEvent("919-admin:client:ReceiveVehiclesInfo", src, results)
+            TriggerClientEvent("mri_Qadmin:client:ReceiveVehiclesInfo", src, results)
         end
     end
 end)
 
-RegisterNetEvent("919-admin:server:RequestLeaderboardInfo", function()
+RegisterNetEvent("mri_Qadmin:server:RequestLeaderboardInfo", function()
     local src = source
     if AdminPanel.HasPermission(src, "leaderboardinfo") then
         local money, vehicles = Compat.GetLeaderboardInfo()
-        TriggerClientEvent("919-admin:client:ReceiveLeaderboardInfo", src, money, vehicles)
+        TriggerClientEvent("mri_Qadmin:client:ReceiveLeaderboardInfo", src, money, vehicles)
     end
 end)
 
-RegisterNetEvent("919-admin:server:RequestItemsInfo", function()
+RegisterNetEvent("mri_Qadmin:server:RequestItemsInfo", function()
     local src = source
     if AdminPanel.HasPermission(src, "itemsinfo") then
         local items = Compat.GetItemsList()
-        TriggerClientEvent("919-admin:client:ReceiveItemsInfo", src, items)
+        TriggerClientEvent("mri_Qadmin:client:ReceiveItemsInfo", src, items)
     end
 end)
 
-RegisterNetEvent("919-admin:server:RequestCharacters", function()
+RegisterNetEvent("mri_Qadmin:server:RequestCharacters", function()
     local src = source
     if AdminPanel.HasPermission(src, "characterspage") then
         local results = MySQL.query.await("SELECT * FROM `"..Config.DB.CharactersTable.."`")
-        TriggerClientEvent("919-admin:client:ReceiveCharacters", src, results)
+        TriggerClientEvent("mri_Qadmin:client:ReceiveCharacters", src, results)
     end
 end)
 
-RegisterNetEvent("919-admin:server:RequestNoClip", function()
+RegisterNetEvent("mri_Qadmin:server:RequestNoClip", function()
     local src = source
     if AdminPanel.HasPermission(src, "noclip") then
-        TriggerClientEvent("919-admin:client:ToggleNoClip", src)
+        TriggerClientEvent("mri_Qadmin:client:ToggleNoClip", src)
     end
 end)
 
-RegisterNetEvent("919-admin:server:AdminChatSend", function(message)
+RegisterNetEvent("mri_Qadmin:server:AdminChatSend", function(message)
     local src = source
     if AdminPanel.HasPermission(src, "adminchat") then
         local SenderName = GetPlayerName(src)
@@ -256,13 +256,13 @@ RegisterNetEvent("919-admin:server:AdminChatSend", function(message)
         for k, v in pairs(GetPlayers()) do
             v = tonumber(v)
             if AdminPanel.HasPermissionEx(v, "adminchat") then
-                TriggerClientEvent("919-admin:client:ReceiveAdminChat", v, AdminPanel.AdminChat)
+                TriggerClientEvent("mri_Qadmin:client:ReceiveAdminChat", v, AdminPanel.AdminChat)
             end
         end
     end
 end)
 
-RegisterNetEvent("919-admin:server:SendReport", function(subject, info, type)
+RegisterNetEvent("mri_Qadmin:server:SendReport", function(subject, info, type)
     local src = source
 
     local Player = QBCore.Functions.GetPlayer(src)
@@ -275,22 +275,22 @@ RegisterNetEvent("919-admin:server:SendReport", function(subject, info, type)
             end
         end
         if reportCount >= Config.MaxReportsPerPlayer then
-            return TriggerClientEvent("919-admin:client:ShowReportAlert", src, Lang:t("alerts.failedReportSend"), Lang:t("alerts.reportLimitReached"))
+            return TriggerClientEvent("mri_Qadmin:client:ShowReportAlert", src, Lang:t("alerts.failedReportSend"), Lang:t("alerts.reportLimitReached"))
         end
-        TriggerClientEvent("919-admin:client:ShowReportAlert", src, Lang:t("alerts.reportSent"), "Your report was sent to server staff!")
+        TriggerClientEvent("mri_Qadmin:client:ShowReportAlert", src, Lang:t("alerts.reportSent"), "Your report was sent to server staff!")
         local sendername = GetPlayerName(src).." ("..Compat.GetCharacterName(src)..")"
         table.insert(AdminPanel.Reports, {ReportID = #AdminPanel.Reports + 1, Claimed = nil, ReportTime = os.time(), SenderCitizenID = CitizenId, SenderID = src, SenderName = sendername, Subject = subject, Info = info, Type = type})
         TriggerEvent("qb-log:server:CreateLog", "adminactions", Lang:t("alerts.reportSent"), "red", sendername..""..Lang:t("alerts.sentFollowingReport").." "..subject.." "..Lang:t("alerts.message").." "..info, false)
         for k, v in pairs(GetPlayers()) do
             v = tonumber(v)
             if AdminPanel.HasPermissionEx(v, "viewreports") then
-                TriggerClientEvent("919-admin:client:ShowReportAlert", v, Lang:t("alerts.newReport"), sendername..": "..subject.." Report ID: "..#AdminPanel.Reports)
+                TriggerClientEvent("mri_Qadmin:client:ShowReportAlert", v, Lang:t("alerts.newReport"), sendername..": "..subject.." Report ID: "..#AdminPanel.Reports)
             end
         end
     end
 end)
 
-RegisterServerEvent("919-admin:server:ClaimReport", function(id)
+RegisterServerEvent("mri_Qadmin:server:ClaimReport", function(id)
     local src = source
     if AdminPanel.HasPermission(src, "claimreport") then
         if AdminPanel.Reports[tonumber(id)] then
@@ -299,99 +299,99 @@ RegisterServerEvent("919-admin:server:ClaimReport", function(id)
             for k, v in pairs(GetPlayers()) do
                 v = tonumber(v)
                 if AdminPanel.HasPermission(v, "viewreports") then
-                    TriggerClientEvent("919-admin:client:ShowReportAlert", v, Lang:t("alerts.reportClaimed"), GetPlayerName(src).." claimed Report ID ".. id.." from "..AdminPanel.Reports[tonumber(id)].SenderName..".")
+                    TriggerClientEvent("mri_Qadmin:client:ShowReportAlert", v, Lang:t("alerts.reportClaimed"), GetPlayerName(src).." claimed Report ID ".. id.." from "..AdminPanel.Reports[tonumber(id)].SenderName..".")
                 end
             end
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", AdminPanel.Reports[tonumber(id)].SenderID, "success", "<strong>"..Lang:t("alerts.report").."</strong>"..Lang:t("alerts.reportClaimedByStaff").. "<strong>"..GetPlayerName(src).."</strong>.")
-            TriggerClientEvent("919-admin:client:ReceiveReportsInfo", src, AdminPanel.Reports)
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", AdminPanel.Reports[tonumber(id)].SenderID, "success", "<strong>"..Lang:t("alerts.report").."</strong>"..Lang:t("alerts.reportClaimedByStaff").. "<strong>"..GetPlayerName(src).."</strong>.")
+            TriggerClientEvent("mri_Qadmin:client:ReceiveReportsInfo", src, AdminPanel.Reports)
         end
     end
 end)
 
 
-RegisterServerEvent("919-admin:server:DeleteReport", function(id)
+RegisterServerEvent("mri_Qadmin:server:DeleteReport", function(id)
     local src = source
     if AdminPanel.HasPermission(src, "deletereport") then
         if AdminPanel.Reports[tonumber(id)] then
             AdminPanel.Reports[tonumber(id)] = nil
             TriggerEvent("qb-log:server:CreateLog", "adminactions", "Report Deleted", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** deleted report ID "..id, false)
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>SUCCESS:</strong> Deleted Report ID " .. id..".")
-            TriggerClientEvent("919-admin:client:ReceiveReportsInfo", src, AdminPanel.Reports)
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>SUCCESS:</strong> Deleted Report ID " .. id..".")
+            TriggerClientEvent("mri_Qadmin:client:ReceiveReportsInfo", src, AdminPanel.Reports)
         end
     end
 end)
 
-RegisterNetEvent("919-admin:server:ResourceAction", function(resourceName, action)
+RegisterNetEvent("mri_Qadmin:server:ResourceAction", function(resourceName, action)
     local src = source
     if AdminPanel.HasPermission(src, "adminmenu") then
         if action == "start" then
             if GetResourceState(resourceName) == "stopped" then
                 StartResource(resourceName)
                 Wait(500)
-                TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.startedResource").."</strong> "..resourceName)
+                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.startedResource").."</strong> "..resourceName)
             else
-                TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.resourceAlready"))
+                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.resourceAlready"))
             end
         elseif action == "stop" then
             if GetResourceState(resourceName) == "started" then
                 StopResource(resourceName)
                 Wait(500)
-                TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.stoppedResource").."</strong> "..resourceName)                else
-                TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.resouceStoppedAlready"))
+                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.stoppedResource").."</strong> "..resourceName)                else
+                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.resouceStoppedAlready"))
             end
         elseif action == "restart" then
             if GetResourceState(resourceName) == "started" then
                 StopResource(resourceName)
                 Wait(500)
                 StartResource(resourceName)
-                TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.RestartedResource").."</strong> "..resourceName)
+                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.RestartedResource").."</strong> "..resourceName)
             else
-                TriggerClientEvent("919-admin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.resouceRestartedAlready"))
+                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.error").."</strong>"..Lang:t("alerts.resouceRestartedAlready"))
             end
         end
-        TriggerClientEvent("919-admin:client:ForceReloadResources", src)
+        TriggerClientEvent("mri_Qadmin:client:ForceReloadResources", src)
     end
 end)
 
-RegisterNetEvent("919-admin:server:MonetaryAction", function(targetId, action, amount)
+RegisterNetEvent("mri_Qadmin:server:MonetaryAction", function(targetId, action, amount)
     local src = source
     if AdminPanel.HasPermission(src, "givetakemoney") then
         if action == "givecash" then
             Compat.PlayerActions.AddMoney(targetId, amount)
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", source, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.gaveCash", {value = amount, value2 = GetPlayerName(targetId)}))
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", source, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.gaveCash", {value = amount, value2 = GetPlayerName(targetId)}))
         elseif action == "removecash" then
             Compat.PlayerActions.RemoveMoney(targetId, amount)
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", source, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.removeCash", {value = amount, value2 = GetPlayerName(targetId)}))
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", source, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.removeCash", {value = amount, value2 = GetPlayerName(targetId)}))
         elseif action == "givebank" then
             Compat.PlayerActions.AddBank(targetId, amount)
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", source, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.gaveBank", {value = amount, value2 = GetPlayerName(targetId)}))
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", source, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.gaveBank", {value = amount, value2 = GetPlayerName(targetId)}))
         elseif action == "removebank" then
             Compat.PlayerActions.RemoveBank(targetId, amount)
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", source, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.removeBank", {value = amount, value2 = GetPlayerName(targetId)}))
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", source, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.removeBank", {value = amount, value2 = GetPlayerName(targetId)}))
         end
     end
 end)
 
-RegisterNetEvent("919-admin:server:RequestViewPlayer", function(CitizenId)
+RegisterNetEvent("mri_Qadmin:server:RequestViewPlayer", function(CitizenId)
     DebugTrace(CitizenId)
     local src = source
     local Player = Compat.GetPlayerFromCharacterIdentifier(CitizenId)
     if Player then
         local sourcer = Player.source or Player.PlayerData.source
-        TriggerClientEvent("919-admin:client:ViewPlayer", src, true, sourcer)
+        TriggerClientEvent("mri_Qadmin:client:ViewPlayer", src, true, sourcer)
     else
-        TriggerClientEvent("919-admin:client:ViewPlayer", src, false, Compat.GetOfflinePlayerFromCharacterIdentifier(CitizenId))
+        TriggerClientEvent("mri_Qadmin:client:ViewPlayer", src, false, Compat.GetOfflinePlayerFromCharacterIdentifier(CitizenId))
     end
 end)
 
 AddEventHandler("playerDropped", function()
 	local src = source
-    TriggerClientEvent("919-admin:RemovePlayer", -1, src)
+    TriggerClientEvent("mri_Qadmin:RemovePlayer", -1, src)
 end)
 
-RegisterNetEvent("919-admin:server:RefreshMenu", function(silent)
+RegisterNetEvent("mri_Qadmin:server:RefreshMenu", function(silent)
     local src = source
-    TriggerClientEvent("919-admin:client:RefreshMenu", src, json.encode(Compat.GetPlayerList()), silent)
+    TriggerClientEvent("mri_Qadmin:client:RefreshMenu", src, json.encode(Compat.GetPlayerList()), silent)
 end)
 
 RegisterServerEvent("qb-log:server:CreateLog",  function(name, title, color, message, tagEveryone)
@@ -421,7 +421,7 @@ RegisterServerEvent("qb-log:server:CreateLog",  function(name, title, color, mes
 end)
 
 
-Compat.CreateCallback("919-admin:server:HasPermission", function(source, cb, permission)
+Compat.CreateCallback("mri_Qadmin:server:HasPermission", function(source, cb, permission)
     if AdminPanel.HasPermission(source, permission) then
         return cb(true)
     end
@@ -456,9 +456,9 @@ AdminPanel.HasPermission = function(targetId, permName)
 
     if hasPerms then
         if permName ~= "clearreports" and permName ~= "clearadminchat" then
-            TriggerClientEvent("919-admin:client:ShowPanelAlert", targetId, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.noPermission"))
+            TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", targetId, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.noPermission"))
         end
-        TriggerClientEvent("919-admin:client:ResetMenu", targetId)
+        TriggerClientEvent("mri_Qadmin:client:ResetMenu", targetId)
     end
     return false
 end
@@ -487,7 +487,7 @@ AdminPanel.HasPermissionEx = function(targetId, permName)
             end
         end
     end
-    TriggerClientEvent("919-admin:client:ResetMenu", targetId)
+    TriggerClientEvent("mri_Qadmin:client:ResetMenu", targetId)
     return false
 end
 
@@ -497,7 +497,7 @@ AdminPanel.CharacterName = function(Player)
     end
 end
 
-RegisterNetEvent("919-admin:server:RequestResourcePageInfo", function()
+RegisterNetEvent("mri_Qadmin:server:RequestResourcePageInfo", function()
     local src = source
     if AdminPanel.HasPermission(src, "resourcepage") then
         local resourceList = {}
@@ -509,24 +509,24 @@ RegisterNetEvent("919-admin:server:RequestResourcePageInfo", function()
                 end
             end
         end
-        TriggerClientEvent("919-admin:client:ReceiveResourcePageInfo", src, resourceList)
+        TriggerClientEvent("mri_Qadmin:client:ReceiveResourcePageInfo", src, resourceList)
     end
 end)
 
-RegisterNetEvent("919-admin:server:RequestCurrentLogs", function()
+RegisterNetEvent("mri_Qadmin:server:RequestCurrentLogs", function()
     local src = source
     if AdminPanel.HasPermission(src, "serverlogs") then
-        TriggerClientEvent("919-admin:client:ReceiveCurrentLogs", src, InterceptedLogs)
+        TriggerClientEvent("mri_Qadmin:client:ReceiveCurrentLogs", src, InterceptedLogs)
     end
 end)
 
-RegisterNetEvent("919-Admin:server:OpenInventory", function(target)
+RegisterNetEvent("mri_Qadmin:server:OpenInventory", function(target)
     local src = source
     TriggerClientEvent('mri-Qadmin:client:inventory', target, tonumber(target))
     -- TriggerClientEvent("inventory:client:RobPlayer:Admin", target, tonumber(target))
 end)
 
-RegisterNetEvent("919-admin:server:RequestServerMetrics", function()
+RegisterNetEvent("mri_Qadmin:server:RequestServerMetrics", function()
     local src = source
     if AdminPanel.HasPermission(src, "servermetrics") then
         local ServerMetrics = {}
@@ -585,7 +585,7 @@ RegisterNetEvent("919-admin:server:RequestServerMetrics", function()
             results = MySQL.query.await("SELECT DISTINCT `identifier` FROM `"..Config.DB.CharactersTable.."`", {})
         end
         ServerMetrics.UniquePlayers = #results
-        TriggerClientEvent("919-admin:client:ReceiveServerMetrics", src, ServerMetrics)
+        TriggerClientEvent("mri_Qadmin:client:ReceiveServerMetrics", src, ServerMetrics)
     end
 end)
 
@@ -640,7 +640,7 @@ AdminPanel.GetAllPlayers = function(cb)
     if cb then cb() end
 end
 
-RegisterNetEvent("919-admin:server:GetPlayersForBlips", function()
+RegisterNetEvent("mri_Qadmin:server:GetPlayersForBlips", function()
     local src = source
     if Config.EnableNames then
         local tempPlayers = {}
@@ -663,6 +663,6 @@ RegisterNetEvent("919-admin:server:GetPlayersForBlips", function()
             return a.id < b.id
         end)
         PlayersB = tempPlayers
-        TriggerClientEvent("919-admin:client:Show", src, PlayersB)
+        TriggerClientEvent("mri_Qadmin:client:Show", src, PlayersB)
     end
 end)
