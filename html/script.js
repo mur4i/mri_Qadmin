@@ -2631,7 +2631,7 @@ AdminPanel.Open = function(data) {
     AdminPanel.ServerInformation = data.serverData;
     AdminPanel.MaxPlayers = data.maxplayers;
     AdminPanel.Version = data.version;
-    $("#919adminversion").html(AdminPanel.Version);
+    $("#mri_Qadmin_version").html(AdminPanel.Version);
     $("#adminname").html(data.name);
     $("#playersonline").html(AdminPanel.PlayerList.length + " / " + AdminPanel.MaxPlayers);
     $("#playersonlinebar").css({"width": ((AdminPanel.PlayerList.length / AdminPanel.MaxPlayers) * 100)+"%"});
@@ -2683,8 +2683,8 @@ AdminPanel.Open = function(data) {
     }
     AdminPanel.IsOpen = true;
     $('#dashboardpagebtn').click();
-    $('.copyright').html('<span>Painel Admin <span id="919adminversion"></span><br />Copyright &copy; 2024 mri_Qbox Brasil <img src="assets/img/brazil.png" class="mb-1" /><br />💻 dev discord: .mur4i</span>');
-    $("#919adminversion").html(AdminPanel.Version);
+    $('.copyright').html('<span>Painel Admin <span id="mri_Qadmin_version"></span><br />Tradução & Adaptação &copy; 2024 mri_Qbox Brasil <img src="assets/img/brazil.png" class="mb-1" /><br />💻 dev discord: .mur4i</span>');
+    $("#mri_Qadmin_version").html(AdminPanel.Version);
     AdminPanel.SetTheme(data.Theme);
     $("#themesel").val(data.Theme);
 }
