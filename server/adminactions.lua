@@ -947,7 +947,7 @@ RegisterServerEvent("mri_Qadmin:server:BringPlayer", function(targetId)
     if AdminPanel.HasPermission(src, "teleport") then
         SendPlayerBack[targetId] = GetEntityCoords(GetPlayerPed(targetId))
         local coords = GetEntityCoords(GetPlayerPed(src))
-        SetEntityCoords(GetPlayerPed(targetId), coords)
+        SetEntityCoords(GetPlayerPed(targetId), coords.x + 1, coords.y, coords.z)
         TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.teleportToYou", {value = GetPlayerName(targetId)}))
         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Teleport", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** brought **" .. GetPlayerName(targetId) .. "** [" .. targetId .. "] to them", false)
     end
