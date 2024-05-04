@@ -168,14 +168,14 @@ if (IsDuplicityVersion()) then
         SetPlayerJob = function(targetId, job, grade)
             local p = QBCore.Functions.GetPlayer(targetId)
             if p then
-                p.Functions.SetJob(job, grade)
+                p.Functions.SetJob(tostring(job), tonumber(grade))
                 p.Functions.Save()
             end
         end,
         SetPlayerGang = function(targetId, gang, grade)
             local p = QBCore.Functions.GetPlayer(targetId)
             if p then
-                p.Functions.SetGang(gang, grade)
+                p.Functions.SetGang(tostring(gang), tonumber(grade))
                 p.Functions.Save()
             end
         end,

@@ -669,13 +669,14 @@ end)
 
 RegisterServerEvent("mri_Qadmin:server:SetGang", function(targetId, gang, grade)
     local src = source
+    local grade = tonumber(grade)
     if AdminPanel.HasPermission(src, "setgang") then
         if QBCore then
             if QBCore.Shared.Gangs[gang] ~= nil then
-                if QBCore.Shared.Gangs[gang].grades[tostring(grade)] ~= nil then
+                if QBCore.Shared.Gangs[gang].grades[tonumber(grade)] ~= nil then
                     local targetPlayer = QBCore.Functions.GetPlayer(targetId)
                     if targetPlayer then
-                        targetPlayer.Functions.SetGang(gang, grade)
+                        targetPlayer.Functions.SetGang(tostring(gang), grade)
                         targetPlayer.Functions.Save()
                         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Gang", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** set the gang of " .. GetPlayerName(targetId) .. " to " .. gang .. " (" .. grade .. ")", false)
                         TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.jobSet", {value = gang, value2 = grade}))
@@ -829,6 +830,8 @@ end)
 
 RegisterServerEvent("mri_Qadmin:server:SetGangGradeByCitizenId", function(citizenId, grade)
     local src = source
+    local grade = tonumber(grade)
+
     if AdminPanel.HasPermission(src, "setgang") then
         if QBCore then
             local targetPlayer = QBCore.Functions.GetPlayerByCitizenId(citizenId)
@@ -837,7 +840,7 @@ RegisterServerEvent("mri_Qadmin:server:SetGangGradeByCitizenId", function(citize
                     targetPlayer.Functions.SetGang(targetPlayer.PlayerData.gang.name, grade)
                     targetPlayer.Functions.Save()
                     TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Gang Grade", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** set gang grade of " .. GetPlayerName(targetPlayer.PlayerData.source) .. " to " .. grade .. ".", false)
-                    TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> Set gang grade of " .. AdminPanel.CharacterName(targetPlayer) .. " (" .. GetPlayerName(targetId) .. ") to " .. grade)
+                    TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> Set gang grade of " .. AdminPanel.CharacterName(targetPlayer) .. " (" .. GetPlayerName(targetPlayer.PlayerData.source) .. ") to " .. grade)
                 else
                     TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.invalidgangGrade"))
                 end

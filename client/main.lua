@@ -28,13 +28,13 @@ local ShowNames = false
 
 CreateThread(function()
     Wait(50)
-    local DM = GetResourceKvpInt("mri_Qadmin:setting:darkmode")
+    local DM = GetResourceKvpInt("mri_Qadmin:setting:darkmode") or 1
     if DM == 1 then DM = true elseif DM == 0 then DM = false end
-    local ST = GetResourceKvpInt("mri_Qadmin:setting:seethrough")
+    local ST = GetResourceKvpInt("mri_Qadmin:setting:seethrough") or 0
     if ST == 1 then ST = true elseif ST == 0 then ST = false end
     local NT = GetResourceKvpInt("mri_Qadmin:setting:notifications")
     if NT == 1 then NT = true elseif NT == 0 then NT = false end
-    local theme = GetResourceKvpInt("mri_Qadmin:setting:theme")
+    local theme = GetResourceKvpInt("mri_Qadmin:setting:theme") or 2
     AdminPanel.Settings = {DarkMode = DM, SeeThrough = ST, Notifications = NT, Theme = theme}
     print("Configurações do painel admin carregadas! [Discord .mur4i]")
 end)
@@ -1211,16 +1211,12 @@ RegisterNUICallback("Action", function(info)
             end
         end, "setViewDistance")
     elseif info["action"] == "copyEntityInfo" then
-        print("hi")
         Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
-            print(hasPermission)
             if hasPermission then
-                print("noice")
                 CopyToClipboard()
                 TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.copied"))
             end
         end, "copyEntityInfo")
-        print("no u")
     elseif info["action"] == "freeaimMode" then
         Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             if hasPermission then
@@ -1447,6 +1443,7 @@ RegisterNUICallback("SaveSetting", function(data)
             end
         elseif data["setting"] == "theme" then
             AdminPanel.Settings.Notifications = tonumber(data["value"])
+            AdminPanel.Settings.Theme = tonumber(data["value"])
             SetResourceKvpInt("mri_Qadmin:setting:theme", tonumber(data["value"]))
         end
         DebugTrace("NUICallback: SaveSetting [".. data["setting"]..", "..data["value"].."]")
@@ -1590,8 +1587,8 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(5)
         if AdminPanel.Spectating then
-            drawTxt("NOW SPECTATING "..AdminPanel.SpectatingPlayer.." [ID: "..AdminPanel.SpectatingID.."] - ~r~BACKSPACE~s~ TO STOP", 4, true, 0.47, 0.88, 0.6, 255, 255, 255, 255)
-            drawTxt("[~y~LEFT ARROW~s~] Spectate Previous Player - [~y~RIGHT ARROW~s~] Spectate Next Player", 4, true, 0.47, 0.92, 0.6, 255, 255, 255, 255)
+            drawTxt("ESPECTANDO AGORA "..AdminPanel.SpectatingPlayer.." [ID: "..AdminPanel.SpectatingID.."] - ~r~BACKSPACE~s~ PARA CANCELAR", 4, true, 0.47, 0.88, 0.6, 255, 255, 255, 255)
+            drawTxt("[~y~SETA ESQUERDA~s~] Ver anterior - [~y~SETA DIREITA~s~] Ver próximo", 4, true, 0.47, 0.92, 0.6, 255, 255, 255, 255)
             if IsControlJustReleased(0, 177) then
                 AdminPanel.SpectatePlayer(-1, -1, "")
             end
