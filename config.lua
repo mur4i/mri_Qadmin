@@ -24,7 +24,7 @@ Config.AdminPanelCommand                    = "adm"
 
 Config.NoClipType                           = 4                     -- 1 (default) NEW txAdmin-like NoClip system, or 2 for old style 919Admin NoClip system, or 3 for default qbcore NoClip system
 
-Config.ShowIPInIdentifiers                  = true                 -- Whether to show player's IPs in the identifiers box in player info view
+Config.ShowIPInIdentifiers                  = true                  -- Whether to show player's IPs in the identifiers box in player info view
 
 Config.EnableReportCommand                  = true                  -- Enable or disable the report command if you use another report system (reports tab will still show)
 Config.ReportCommand                        = "report"              -- The command to use for reports (default /report)
@@ -36,7 +36,7 @@ Config.DB.CharactersTable                   = "players"             -- Standards
 Config.DB.BansTable                         = "bans"
 
 Config.AnnounceBan                          = true                  -- Whether to announce bans in chat or not
-Config.TagEveryone                          = true                 -- Enable to tag everyone in the discord log on ban
+Config.TagEveryone                          = true                  -- Enable to tag everyone in the discord log on ban
 
 Config.EnableNames                          = true                  -- Whether or not to enable the names overhead
 Config.AllPlayersUseNames                   = false                 -- Wheter or not all players can use the overhead names

@@ -112,8 +112,7 @@ RegisterNetEvent("mri_Qadmin:client:ToggleNoClip", function()
         ToggleNoClip(AdminPanel.NewNoClip)
     elseif Config.NoClipType == 4 then
         AdminPanel.NewNoClip = not AdminPanel.NewNoClip
-        toggleNoClipMode()
-        -- toggleNoClipMode(AdminPanel.NewNoClip)
+        ToggleNoClipMode()
     end
     if AdminPanel.NewNoClip or AdminPanel.NoClip then
         TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.enabled").."</strong>"..Lang:t("alerts.noclipEnabled"))

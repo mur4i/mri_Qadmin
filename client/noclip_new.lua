@@ -78,7 +78,7 @@ local minY, maxY = -89.0, 89.0 -- Ajuste os limites de rotação vertical
 local inputRotEnabled = false
 local disableControls = { 32, 33, 34, 35, 36, 12, 13, 14, 15, 16, 17 }
 
-function toggleNoclipMurai()
+local function toggleNoclipMurai()
     CreateThread(function()
         local inVehicle = false
 
@@ -113,6 +113,8 @@ function toggleNoclipMurai()
 
         while noclipEnabled do
             Wait(0)
+            FreezeEntityPosition(ent, true)
+
             local _, fv = GetCamMatrix(noclipCam)
             if IsDisabledControlPressed(2, 17) then
                 speed = math.min(speed + 0.1, maxSpeed)
@@ -157,7 +159,7 @@ function toggleNoclipMurai()
                 end
             end
 
-            if IsDisabledControlPressed(2, 22) then
+            if IsDisabledControlPressed(2, 22) or IsDisabledControlPressed(2, 38) then
                 local setPos = GetOffsetFromEntityInWorldCoords(ent, 0.0, 0.0, multiplier * speed / 2)
                 SetEntityCoordsNoOffset(ent, setPos.x, setPos.y, setPos.z, false, false, false)
                 if not inVehicle then
@@ -205,7 +207,7 @@ function toggleNoclipMurai()
     end)
 end
 
-function checkInputRotation()
+local function checkInputRotation()
     CreateThread(function()
         while inputRotEnabled do
             while not noclipCam or IsPauseMenuActive() do Wait(0) end
@@ -236,7 +238,7 @@ function checkInputRotation()
     end)
 end
 
-function toggleNoClipMode(forceMode)
+function ToggleNoClipMode(forceMode)
     if forceMode ~= nil then
         noclipEnabled = forceMode
         inputRotEnabled = noclipEnabled
