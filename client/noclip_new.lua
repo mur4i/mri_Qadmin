@@ -74,7 +74,7 @@ local invisible = nil
 local noclipCam = nil
 local speed = 1.0
 local maxSpeed = 32.0
-local minY, maxY = -150.0, 160.0
+local minY, maxY = -89.0, 89.0 -- Ajuste os limites de rotação vertical
 local inputRotEnabled = false
 local disableControls = { 32, 33, 34, 35, 36, 12, 13, 14, 15, 16, 17 }
 
@@ -204,6 +204,7 @@ function toggleNoclipMurai()
         end
     end)
 end
+
 function checkInputRotation()
     CreateThread(function()
         while inputRotEnabled do
@@ -213,16 +214,19 @@ function checkInputRotation()
             local sensitivity = GetProfileSetting(14) * 2
 
             if GetProfileSetting(15) == 0 then -- Invert controls
-                sensitivity = -sensitivity
+                axisY = -axisY
             end
 
             if math.abs(axisX) > 0 or math.abs(axisY) > 0 then
                 local rotation = GetCamRot(noclipCam, 2)
-                local rotz = rotation.z + (axisX * sensitivity)
-                local yValue = axisY * sensitivity
-                local rotx = rotation.x
-                if rotx + yValue > minY and rotx + yValue < maxY then
-                    rotx = rotation.x + yValue
+                local rotz = rotation.z - (axisX * sensitivity) -- Corrigido: invertido o eixo X
+                local rotx = rotation.x + (axisY * sensitivity)
+
+                -- Limita a rotação no eixo X para evitar movimentos extremos
+                if rotx < minY then
+                    rotx = minY
+                elseif rotx > maxY then
+                    rotx = maxY
                 end
 
                 SetCamRot(noclipCam, rotx, rotation.y, rotz, 2)
@@ -247,6 +251,8 @@ function toggleNoClipMode(forceMode)
     end
 end
 end
+
+
 
 if Config.NoClipType == 3 then
     IsNoClipping      = false
