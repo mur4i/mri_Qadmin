@@ -166,14 +166,16 @@ if (IsDuplicityVersion()) then
             return PlayerList
         end,
         SetPlayerJob = function(targetId, job, grade)
-            local p = QBCore.Functions.GetPlayer(targetId)
+            print("admin", targetId, job, grade)
+            local p = QBCore.Functions.GetPlayer(tonumber(targetId))
             if p then
+                print("admin", job, grade)
                 p.Functions.SetJob(tostring(job), tonumber(grade))
                 p.Functions.Save()
             end
         end,
         SetPlayerGang = function(targetId, gang, grade)
-            local p = QBCore.Functions.GetPlayer(targetId)
+            local p = QBCore.Functions.GetPlayer(tonumber(targetId))
             if p then
                 p.Functions.SetGang(tostring(gang), tonumber(grade))
                 p.Functions.Save()
@@ -206,7 +208,7 @@ if (IsDuplicityVersion()) then
             end
         end,
         GetMasterEmployeeList = function()
-            local jobs = QBCore.Shared.Jobs
+            local jobs = exports.qbx_core:GetJobs() --QBCore.Shared.Jobs
             local list = {}
             for k,v in pairs(jobs) do
                 local res = MySQL.query.await("SELECT * FROM `"..Config.DB.CharactersTable.."` WHERE `job` LIKE ?", {"%"..k.."%"})
@@ -236,7 +238,7 @@ if (IsDuplicityVersion()) then
             return list
         end,
         GetMasterGangList = function()
-            local gangs = QBCore.Shared.Gangs
+            local gangs = exports.qbx_core:GetGangs() --QBCore.Shared.Gangs
             local list = {}
             for k,v in pairs(gangs) do
                 local GangMembers = {}

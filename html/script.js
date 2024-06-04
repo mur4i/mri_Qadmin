@@ -1020,27 +1020,30 @@ AdminPanel.Init = function() {
                 }
             });
         } else if(action == "setjob") {
-            $("#confirm-body").html(`
-                <strong>`+AdminPanel.Language.setJobTranslation+`</strong> of ${AdminPanel.EditingPlayerInfo.name}?<br/>
-                <input type="text" class="form-control" id="jobname" placeholder="Job" style="margin-bottom:5px">
-                <input type="text" class="form-control" id="jobgrade" placeholder="Grade">
-            `);                   
-            $("#confirm").modal('show');
-            AdminPanel.ModalOpen = true;
-            setTimeout(() => {
-                document.getElementById('jobname').focus();
-            }, 500);
+            $.post(`https://${GetParentResourceName()}/mri_SetJob`, JSON.stringify({ id: AdminPanel.EditingPlayerId }));
+
+            // $("#confirm-body").html(`
+            //     <strong>`+AdminPanel.Language.setJobTranslation+`</strong> de ${AdminPanel.EditingPlayerInfo.name}?<br/>
+            //     <input type="text" class="form-control" id="jobname" placeholder="Job" style="margin-bottom:5px">
+            //     <input type="text" class="form-control" id="jobgrade" placeholder="Grade">
+            // `);                   
+            // $("#confirm").modal('show');
+            // AdminPanel.ModalOpen = true;
+            // setTimeout(() => {
+            //     document.getElementById('jobname').focus();
+            // }, 500);
         } else if(action == "setgang") {
-            $("#confirm-body").html(`
-                <strong>`+AdminPanel.Language.setGangTranslation+`</strong> of ${AdminPanel.EditingPlayerInfo.name}?<br/>
-                <input type="text" class="form-control" id="gangname" placeholder="Gang" style="margin-bottom:5px">
-                <input type="text" class="form-control" id="ganggrade" placeholder="Grade">
-            `);                   
-            $("#confirm").modal('show');
-            AdminPanel.ModalOpen = true;
-            setTimeout(() => {
-                document.getElementById('gangname').focus();
-            }, 500);
+            $.post(`https://${GetParentResourceName()}/mri_SetGang`, JSON.stringify({ id: AdminPanel.EditingPlayerId }));
+            // $("#confirm-body").html(`
+            //     <strong>`+AdminPanel.Language.setGangTranslation+`</strong> of ${AdminPanel.EditingPlayerInfo.name}?<br/>
+            //     <input type="text" class="form-control" id="gangname" placeholder="Gang" style="margin-bottom:5px">
+            //     <input type="text" class="form-control" id="ganggrade" placeholder="Grade">
+            // `);                   
+            // $("#confirm").modal('show');
+            // AdminPanel.ModalOpen = true;
+            // setTimeout(() => {
+            //     document.getElementById('gangname').focus();
+            // }, 500);
         } else if(action == "giveitem") {
             $("#confirm-body").html(`
                 <strong>`+AdminPanel.Language.giveItemTranslation+`</strong> to ${AdminPanel.EditingPlayerInfo.name}?<br/>

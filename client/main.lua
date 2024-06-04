@@ -750,6 +750,14 @@ RegisterNetEvent("mri_Qadmin:client:OpenSkinMenu1", function()
     end
 end)
 
+RegisterNUICallback("mri_SetJob", function(data)
+    exports.mri_Qbox:setPlayerJob(tonumber(data.id))
+end)
+
+RegisterNUICallback("mri_SetGang", function(data)
+    exports.mri_Qbox:setPlayerGang(tonumber(data.id))
+end)
+
 RegisterNUICallback("Action", function(info)
     local currentPlayer = info["id"]
     if info["action"] == "uncuffSelf" then

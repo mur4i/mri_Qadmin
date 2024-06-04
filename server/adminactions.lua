@@ -670,6 +670,7 @@ end)
 RegisterServerEvent("mri_Qadmin:server:SetGang", function(targetId, gang, grade)
     local src = source
     local grade = tonumber(grade)
+    local targetId = tonumber(targetId)
     if AdminPanel.HasPermission(src, "setgang") then
         if QBCore then
             if QBCore.Shared.Gangs[gang] ~= nil then
