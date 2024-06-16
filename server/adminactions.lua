@@ -671,24 +671,11 @@ RegisterServerEvent("mri_Qadmin:server:SetGang", function(targetId, gang, grade)
     local src = source
     local grade = tonumber(grade)
     local targetId = tonumber(targetId)
+    print(json.encode(QBCore.Shared.Gangs))
     if AdminPanel.HasPermission(src, "setgang") then
-        if QBCore then
-            if QBCore.Shared.Gangs[gang] ~= nil then
-                if QBCore.Shared.Gangs[gang].grades[tonumber(grade)] ~= nil then
-                    local targetPlayer = QBCore.Functions.GetPlayer(targetId)
-                    if targetPlayer then
-                        targetPlayer.Functions.SetGang(tostring(gang), grade)
-                        targetPlayer.Functions.Save()
-                        TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Gang", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** set the gang of " .. GetPlayerName(targetId) .. " to " .. gang .. " (" .. grade .. ")", false)
-                        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.jobSet", {value = gang, value2 = grade}))
-                    end
-                else
-                    TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.invalidgangGrade"))
-                end
-            else
-                TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.invalidgang"))
-            end
-        end
+        Compat.SetPlayerGang(targetId, gang, grade)
+        TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Gang", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** set the gang of " .. GetPlayerName(targetId) .. " to " .. gang .. " (" .. grade .. ")", false)
+        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.jobSet", {value = gang, value2 = grade}))
     end
 end)
 
