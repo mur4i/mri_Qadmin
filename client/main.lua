@@ -1167,8 +1167,8 @@ RegisterNUICallback("Action", function(info)
         Compat.TriggerCallback("mri_Qadmin:server:HasPermission", function(hasPermission)
             local vehicle = Compat.GetClosestVehicle()
             if vehicle then
-                -- exports[Config.FuelScript]:SetFuel(vehicle, 100)
-                TriggerEvent("ox_fuel:createStatebag", vehicle, 100)
+                exports[Config.FuelScript]:SetFuel(vehicle, 100)
+                -- TriggerEvent("ox_fuel:createStatebag", vehicle, 100)
                 TriggerEvent("mri_Qadmin:client:ShowPanelAlert", "success", "<strong>"..Lang:t("alerts.success").."</strong>"..Lang:t("alerts.fuelSet"))
             end
         end, "fillgastank")
