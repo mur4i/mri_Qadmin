@@ -50,6 +50,10 @@ RegisterCommand("*adminpanel", function()
 end, false)
 RegisterKeyMapping("*adminpanel", "(mri-Qadmin)", "keyboard", Config.AdminPanelKey)
 
+RegisterCommand("nc", function()
+    TriggerServerEvent("mri_Qadmin:server:RequestNoClip")
+end, false)
+
 RegisterCommand("*noclip", function()
     TriggerServerEvent("mri_Qadmin:server:RequestNoClip")
 end, false)
