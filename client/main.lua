@@ -806,6 +806,12 @@ RegisterNUICallback("Action", function(info)
     elseif info["action"] == "save" then
         TriggerServerEvent("mri_Qadmin:server:SavePlayer", currentPlayer)
     elseif info["action"] == "clothing" then
+        if currentPlayer == GetPlayerServerId(PlayerId()) then
+            SendNUIMessage({
+                action = "close"
+            })
+            SetNuiFocus(false, false)
+        end
         TriggerServerEvent("mri_Qadmin:server:OpenSkinMenu", currentPlayer)
     elseif info["action"] == "sclothing" then
         SendNUIMessage({
